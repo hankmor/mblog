@@ -28,7 +28,6 @@
         <module>jpress-web-template-userblog</module>
     </modules>
 
-
 	<properties>
 		<jdk.version>1.7</jdk.version>
 		<servlet.api.version>3.0.1</servlet.api.version>
@@ -50,7 +49,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>

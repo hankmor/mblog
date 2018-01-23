@@ -8,7 +8,7 @@
 		<artifactId>jpress</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>jpress-web</artifactId>
+	<artifactId>mblog</artifactId>
 	<name>jpress-web</name>
 	<url>http://jpress.io</url>
 	<packaging>war</packaging>
@@ -19,7 +19,6 @@
 	</properties>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.jpress</groupId>
 			<artifactId>jpress-web-core</artifactId>
@@ -71,7 +70,6 @@
 
 	<build>
 		<finalName>${project.artifactId}-${project.version}</finalName>
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
