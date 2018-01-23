@@ -8,7 +8,7 @@
 		<artifactId>jpress</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>mblog</artifactId>
+	<artifactId>blog</artifactId>
 	<name>jpress-web</name>
 	<url>http://jpress.io</url>
 	<packaging>war</packaging>
