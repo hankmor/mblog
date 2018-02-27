@@ -54,7 +54,8 @@ public class ContentsTag extends JTag {
 		String[] slugs = getParamToStringArray("slug");
 		BigInteger[] userIds = getParamToBigIntegerArray("userId");
 		BigInteger[] parentIds = getParamToBigIntegerArray("parentId");
-		Boolean hasThumbnail = getParamToBool("hasThumbnail");
+//		Boolean hasThumbnail = getParamToBool("hasThumbnail");
+		Boolean hasThumbnail = null;
 
 		Taxonomy upperTaxonomy = null;
 		if (modules != null && modules.length == 1) {
