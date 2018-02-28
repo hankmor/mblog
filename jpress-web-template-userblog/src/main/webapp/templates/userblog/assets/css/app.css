@@ -1,5 +1,6 @@
 /**************************page start*************************/
 body {
+    background-color: rgba(153, 153, 153, 0.3);
     margin: 0;
     padding: 0;
     font-family: "Microsoft YaHei", "Open Sans", Arial, "Hiragino Sans GB", "Lantinghei SC", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
@@ -475,7 +476,7 @@ ul, li {
 }
 
 .x-pc-width {
-    width: 1120px;
+    width: 1200px;
     margin: 0 auto;
 }
 
@@ -1471,6 +1472,8 @@ a.lable-weight:hover {
     padding: 3rem 0;
     color: #666666;
     text-align: center;
+    width: 1200px;
+    margin: 0 auto;
 }
 
 /**************************common elements end***************************/
@@ -1828,13 +1831,14 @@ a.x-a-active:hover {
 }
 
 .jblog-nav {
-    width: 100%;
+    width: 1200px;
+    margin: 0 auto;
     background: #fff;
     border-bottom: 1px solid #ededed;
 }
 
 .jblog-nav-content {
-    width: 1120px;
+    width: 1200px;
     margin: 0 auto;
     overflow: hidden;
     height: 4rem;
@@ -1937,12 +1941,14 @@ a.x-a-active:hover {
 }
 
 .jblog-link {
+    width: 1200px;
+    margin: 0 auto;
     background-color: #fff;
     border-bottom: 1px solid #ededed;
 }
 
 .jblog-link-content {
-    width: 1120px;
+    width: 1200px;
     margin: 0 auto;
     height: 2rem;
     line-height: 2rem;
@@ -1980,24 +1986,23 @@ a.x-a-active:hover {
 }
 
 .jblog-link-logo {
-    border-bottom: 1px solid #ededed;
+    /*border-bottom: 1px solid #ededed;*/
 }
 
 .jblog-link-logo-content {
-    width: 1120px;
+    width: 1200px;
     margin: 0 auto;
+    background-color: #fff;
     overflow: hidden;
     height: 20rem;
     line-height: 6rem;
 }
 
 .jblog-link-logo-image {
-    /*width: 100%;*/
-    /*float: left;*/
     font-size: 2.4rem;
-    /*position: absolute;*/
-    top: 6em;
-    left: 6em;
+    position: absolute;
+    top: 3.2em;
+    right: 12em;
 }
 
 .jblog-link-logo-adv {
@@ -2154,7 +2159,7 @@ a.x-a-active:hover {
     font-weight: normal;
 }
 
-@media all and (max-width: 1120px) {
+@media all and (max-width: 1200px) {
     .x-pc-width {
         width: 100%;
         padding: 0;
