@@ -1472,7 +1472,7 @@ a.lable-weight:hover {
     padding: 3rem 0;
     color: #666666;
     text-align: center;
-    width: 1200px;
+
     margin: 0 auto;
 }
 
@@ -1831,14 +1831,14 @@ a.x-a-active:hover {
 }
 
 .jblog-nav {
-    width: 1200px;
+
     margin: 0 auto;
     background: #fff;
     border-bottom: 1px solid #ededed;
 }
 
 .jblog-nav-content {
-    width: 1200px;
+
     margin: 0 auto;
     overflow: hidden;
     height: 4rem;
@@ -1941,14 +1941,14 @@ a.x-a-active:hover {
 }
 
 .jblog-link {
-    width: 1200px;
+
     margin: 0 auto;
     background-color: #fff;
     border-bottom: 1px solid #ededed;
 }
 
 .jblog-link-content {
-    width: 1200px;
+
     margin: 0 auto;
     height: 2rem;
     line-height: 2rem;
@@ -1990,7 +1990,7 @@ a.x-a-active:hover {
 }
 
 .jblog-link-logo-content {
-    width: 1200px;
+
     margin: 0 auto;
     background-color: #fff;
     overflow: hidden;
@@ -2210,7 +2210,7 @@ a.x-a-active:hover {
 
     .jblog-link-logo-content {
         padding-left: 1rem;
-        width: 95%;
+        /*width: 95%;*/
     }
 
     .x-box-tags p {
@@ -2313,7 +2313,7 @@ a.x-a-active:hover {
     }
 
     .jblog-link-logo-image {
-        position: inherit;
+        /*position: inherit;*/
     }
 }
 
