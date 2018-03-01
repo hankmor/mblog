@@ -24,7 +24,7 @@
 				</label>
 				<div class="box box-solid">
 					<div  class="box-body no-padding">
-					<textarea id="textarea"  name="content.text" >${(content.text)!}</textarea>
+						<textarea id="textarea"  name="content.text" ><#escape x as x?html>${(content.text)!}</#escape></textarea>
 				</div>
 				</div>
 				<#include "_props_box.html" />
