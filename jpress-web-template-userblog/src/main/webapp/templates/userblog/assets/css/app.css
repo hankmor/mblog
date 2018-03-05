@@ -1990,10 +1990,9 @@ a.x-a-active:hover {
 }
 
 .jblog-link-logo-content {
-
     margin: 0 auto;
     background-color: #fff;
-    overflow: hidden;
+    /*overflow: hidden;*/
     height: 20rem;
     line-height: 6rem;
 }
