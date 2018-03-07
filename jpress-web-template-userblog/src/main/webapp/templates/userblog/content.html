@@ -20,11 +20,12 @@ $(document).ready(function(){
         var tag = $(item).get(0).localName;
         $(item).attr("id","toc"+i);
         $(".toc-content").append('<a class="toc'+tag+'" href="#toc'+i+'">'+$(this).text()+'</a></br>');
-        $(".toch2").css("margin-left",0);
-        $(".toch3").css("margin-left",20);
-        $(".toch4").css("margin-left",40);
+        $(".toch1").css("margin-left",0);
+        $(".toch2").css("margin-left",15);
+        $(".toch3").css("margin-left",30);
+        $(".toch4").css("margin-left",45);
         $(".toch5").css("margin-left",60);
-        $(".toch6").css("margin-left",80);
+        $(".toch6").css("margin-left",75);
     });
 });
 </#macro>
