@@ -1,0 +1,30 @@
+<div class="x-white-box">
+	<h3 class="x-box-title">
+		热门标签 <span class="x-title-border"></span>
+	</h3>
+	<div id="tagCanvasContainer" style="background-color:inherit;width: 100%;">
+		<canvas id="tagCanvas">
+			<!--<p>Anything in here will be replaced on browsers that support the canvas element</p>-->
+		</canvas>
+	</div>
+	<div id="tags">
+		<ul style="display:none;width: 100%;">
+			<@jp.tags count="50">
+			<#list tags as tag>
+				<li>
+					<a href="${tag.url!}">${tag.title!}</a>
+				</li>
+			</#list>
+		</@jp.tags>
+		</ul>
+	</div>
+	<br>
+	<ul class="x-tag">
+		<@jp.tags count="100">
+			<#list tags as tag>
+			<li>
+				<a href="${tag.url!}">${tag.title!}</a>
+			</li>
+			</#list> 
+		</@jp.tags >
+</div>
