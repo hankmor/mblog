@@ -63,9 +63,9 @@ public class ActionCacheHandler extends Handler {
 			cacheKey += queryString;
 		}
 
-		ActionCacheManager.enableCache(request);
-		ActionCacheManager.setCacheKey(request, cacheKey);
-		ActionCacheManager.setCacheContentType(request, actionCache.contentType());
+//		ActionCacheManager.enableCache(request);
+//		ActionCacheManager.setCacheKey(request, cacheKey);
+//		ActionCacheManager.setCacheContentType(request, actionCache.contentType());
 
 		String renderContent = ActionCacheManager.getCache(request, cacheKey);
 		if (renderContent != null) {

@@ -560,9 +560,13 @@ public class ContentQuery extends JBaseQuery {
 		return 0;
 	}
 
-	public List<Archive> findArchives(String module) {
-		String sql = "SELECT DATE_FORMAT( c.created, \"%Y-%m\" ) as d, COUNT( * ) count FROM content c"
-				+ " WHERE c.module = ? GROUP BY d";
+	public List<Archive> findArchives(String module, String lang) {
+		String dateFmt = "%Y-%m";
+		if (StringUtils.isNotBlank(lang) && "cn".equals(lang)) {
+			dateFmt = "%Y年%m月";
+		}
+		String sql = "SELECT DATE_FORMAT( c.created, \"" + dateFmt + "\" ) as d, COUNT( * ) count FROM content c"
+				+ " WHERE c.module = ? GROUP BY d order by d desc";
 		List<Record> list = Jdb.find(sql, module);
 		if (list == null || list.isEmpty())
 			return null;

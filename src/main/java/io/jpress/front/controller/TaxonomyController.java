@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,149 +36,174 @@ import java.util.List;
 
 @RouterMapping(url = Consts.ROUTER_TAXONOMY)
 public class TaxonomyController extends BaseFrontController {
+    public static final String ARCHIVE_MODULE = "archive";
 
-	protected TplModule module;
-	protected String[] slugs;
-	protected Integer page;
+    protected TplModule module;
+    protected String[] slugs;
+    protected Integer page;
+    protected boolean isArchive;
+    protected String date;
 
-	@ActionCache
-	public void index() {
-		try {
-			Render render = onRenderBefore();
-			if (render != null) {
-				render(render);
-			} else {
-				doRender();
-			}
-		} finally {
-			onRenderAfter();
-		}
-	}
+    @ActionCache
+    public void index() {
+        try {
+            Render render = onRenderBefore();
+            if (render != null) {
+                render(render);
+            } else {
+                doRender();
+            }
+        } finally {
+            onRenderAfter();
+        }
+    }
 
-	private void doRender() {
+    private void doRender() {
 
-		initRequest();
+        initRequest();
 
-		List<Taxonomy> taxonomys = tryGetTaxonomy();
-		if (slugs != null && slugs.length > 0 && taxonomys == null) {
-			renderError(404);
-		}
+        List<Taxonomy> taxonomys = tryGetTaxonomy();
+        if (slugs != null && slugs.length > 0 && taxonomys == null) {
+            renderError(404);
+        }
 
-		Taxonomy taxonomy = null;
-		if (taxonomys != null && !taxonomys.isEmpty()) {
-			taxonomy = taxonomys.get(0);
-		}
+        Taxonomy taxonomy = null;
+        if (taxonomys != null && !taxonomys.isEmpty()) {
+            taxonomy = taxonomys.get(0);
+        }
 
-		setAttr(Consts.ATTR_PAGE_NUMBER, page);
-		setAttr("taxonomys", taxonomys);
-		setAttr("taxonomy", taxonomy);
-		setAttr("module", module);
+        setAttr(Consts.ATTR_PAGE_NUMBER, page);
+        setAttr("taxonomys", taxonomys);
+        setAttr("taxonomy", taxonomy);
+        setAttr("module", module);
 
-		setGlobleAttrs(taxonomys);
-		setAttr(MenusTag.TAG_NAME, new MenusTag(getRequest(), taxonomys, null));
-		setAttr(TaxonomysTag.TAG_NAME, new TaxonomysTag(taxonomys));
+        setGlobleAttrs(taxonomys);
+        setAttr(MenusTag.TAG_NAME, new MenusTag(getRequest(), taxonomys, null));
+        setAttr(TaxonomysTag.TAG_NAME, new TaxonomysTag(taxonomys));
 
-		if (taxonomy != null) {
-			Content c = ContentQuery.me().findFirstByModuleAndObjectId(Consts.MODULE_MENU, taxonomy.getId());
-			setAttr("currentMenu", c);
-		}
-		
-		String order = getPara("order"); 
-		if(module.isSupportOrder(order)){
-			setAttr(ContentPageTag.TAG_NAME, new ContentPageTag(getRequest(), page, module.getName(), taxonomys, order));
-		}else{
-			setAttr(ContentPageTag.TAG_NAME, new ContentPageTag(getRequest(), page, module.getName(), taxonomys, null));
-		}
+        if (taxonomy != null) {
+            Content c = ContentQuery.me().findFirstByModuleAndObjectId(Consts.MODULE_MENU, taxonomy.getId());
+            setAttr("currentMenu", c);
+        }
 
-		
-		if (taxonomys == null || taxonomys.size() != 1) {
-			render(String.format("taxonomy_%s.html", module.getName()));
-		} else {
-			render(String.format("taxonomy_%s_%s.html", module.getName(), taxonomys.get(0).getSlug()));
-		}
-	}
+        String order = getPara("order");
+        ContentPageTag contentPageTag;
+        if (module.isSupportOrder(order)) {
+            if (isArchive) {
+                contentPageTag = new ContentPageTag(getRequest(), page, module.getName(), date, order);
+            } else {
+                contentPageTag = new ContentPageTag(getRequest(), page, module.getName(), taxonomys, order);
+            }
+        } else {
+            if (isArchive) {
+                contentPageTag = new ContentPageTag(getRequest(), page, module.getName(), date, null);
+            } else {
+                contentPageTag = new ContentPageTag(getRequest(), page, module.getName(), taxonomys, null);
+            }
+        }
+        setAttr(ContentPageTag.TAG_NAME, contentPageTag);
 
-	private void setGlobleAttrs(List<Taxonomy> taxonomys) {
-		if (taxonomys == null || taxonomys.isEmpty()) {
-			return;
-		}
+        if (taxonomys == null || taxonomys.size() != 1) {
+            if (isArchive) {
+                render(String.format("taxonomy_%s.html", "article"));
+            } else {
+                render(String.format("taxonomy_%s.html", module.getName()));
+            }
+        } else {
+            render(String.format("taxonomy_%s_%s.html", module.getName(), taxonomys.get(0).getSlug()));
+        }
+    }
 
-		StringBuffer title = new StringBuffer();
-		StringBuffer keywords = new StringBuffer();
-		StringBuffer description = new StringBuffer();
+    private void setGlobleAttrs(List<Taxonomy> taxonomys) {
+        if (taxonomys == null || taxonomys.isEmpty()) {
+            return;
+        }
 
-		for (Taxonomy taxonomy : taxonomys) {
-			title.append(taxonomy.getTitle()).append("-");
-			keywords.append(taxonomy.getMetaKeywords()).append(",");
-			description.append(taxonomy.getMetaDescription()).append(";");
-		}
+        StringBuffer title = new StringBuffer();
+        StringBuffer keywords = new StringBuffer();
+        StringBuffer description = new StringBuffer();
 
-		title.deleteCharAt(title.length() - 1);
-		keywords.deleteCharAt(keywords.length() - 1);
-		description.deleteCharAt(description.length() - 1);
+        for (Taxonomy taxonomy : taxonomys) {
+            title.append(taxonomy.getTitle()).append("-");
+            keywords.append(taxonomy.getMetaKeywords()).append(",");
+            description.append(taxonomy.getMetaDescription()).append(";");
+        }
 
-		setAttr(Consts.ATTR_GLOBAL_WEB_TITLE, title.toString());
-		setAttr(Consts.ATTR_GLOBAL_META_KEYWORDS, keywords.toString());
-		setAttr(Consts.ATTR_GLOBAL_META_DESCRIPTION, description.toString());
-	}
+        title.deleteCharAt(title.length() - 1);
+        keywords.deleteCharAt(keywords.length() - 1);
+        description.deleteCharAt(description.length() - 1);
 
-	private List<Taxonomy> tryGetTaxonomy() {
-		return slugs == null || slugs.length == 0 ? null : TaxonomyQuery.me().findBySlugAndModule(slugs, module.getName());
-	}
+        setAttr(Consts.ATTR_GLOBAL_WEB_TITLE, title.toString());
+        setAttr(Consts.ATTR_GLOBAL_META_KEYWORDS, keywords.toString());
+        setAttr(Consts.ATTR_GLOBAL_META_DESCRIPTION, description.toString());
+    }
 
-	/**
-	 * 分类的url种类： 种类1： http://www.xxx.com/module 该module下的所有内容 种类2：
-	 * http://www.xxx.com/module-slug 该module下的slug分类的所有内容 种类3：
-	 * http://www.xxx.com/module-slug1-slug2-slug3
-	 * 该module下的、slug1、slug2、slug3、slug4的所有内容
-	 */
-	private void initRequest() {
-		String moduleName = getPara(0);
-		if (StringUtils.isBlank(moduleName)) {
-			renderError(404);
-		}
+    private List<Taxonomy> tryGetTaxonomy() {
+        return slugs == null || slugs.length == 0 ? null : TaxonomyQuery.me().findBySlugAndModule(slugs, module.getName());
+    }
 
-		module = TemplateManager.me().currentTemplateModule(moduleName);
+    /**
+     * 分类的url种类： 种类1： http://www.xxx.com/module 该module下的所有内容 种类2：
+     * http://www.xxx.com/module-slug 该module下的slug分类的所有内容 种类3：
+     * http://www.xxx.com/module-slug1-slug2-slug3
+     * 该module下的、slug1、slug2、slug3、slug4的所有内容
+     */
+    private void initRequest() {
+        String moduleName = getPara(0);
+        if (StringUtils.isBlank(moduleName)) {
+            renderError(404);
+        }
 
-		if (module == null) {
-			renderError(404);
-		}
+        isArchive = ARCHIVE_MODULE.equals(moduleName);
 
-		int paraCount = getParaCount();
-		if (paraCount == 1) {
-			page = 1;
-		}
+        module = TemplateManager.me().currentTemplateModule(moduleName);
 
-		String slugStrings = null;
-		if (paraCount >= 2) {
-			for (int i = 1; i < paraCount; i++) {
-				String para = getPara(i);
-				if (StringUtils.isNumeric(para)) {
-					page = StringUtils.toInt(para, 1);
-					if (i != paraCount - 1) {
-						renderError(404);
-					}
-				} else {
-					slugStrings = StringUtils.urlDecode(para);
-				}
-			}
-		}
+        if (module == null) {
+            renderError(404);
+        }
 
-		if (StringUtils.isNotBlank(slugStrings)) {
-			slugs = slugStrings.split(",");
-		}
+        int paraCount = getParaCount();
+        if (paraCount == 1) {
+            page = 1;
+        }
 
-		if (page == null || page <= 0) {
-			page = 1;
-		}
-	}
+        String slugStrings = null;
+        if (paraCount >= 2) {
+            for (int i = 1; i < paraCount; i++) {
+                String para = getPara(i);
+                if (StringUtils.isNumeric(para)) {
+                    page = StringUtils.toInt(para, 1);
+                    if (i != paraCount - 1) {
+                        renderError(404);
+                    }
+                } else {
+                    if (isArchive) {
+                        this.date = formatDate(StringUtils.urlDecode(para));
+                    } else {
+                        slugStrings = StringUtils.urlDecode(para);
+                    }
+                }
+            }
+        }
 
-	private Render onRenderBefore() {
-		return HookInvoker.taxonomyRenderBefore(this);
-	}
+        if (StringUtils.isNotBlank(slugStrings)) {
+            slugs = slugStrings.split(",");
+        }
 
-	private void onRenderAfter() {
-		HookInvoker.taxonomyRenderAfter(this);
-	}
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+    }
 
+    private Render onRenderBefore() {
+        return HookInvoker.taxonomyRenderBefore(this);
+    }
+
+    private void onRenderAfter() {
+        HookInvoker.taxonomyRenderAfter(this);
+    }
+
+    private String formatDate(String dt) {
+        return dt.substring(0, 4) + "-" + dt.substring(5, 7);
+    }
 }

@@ -22,6 +22,9 @@
 		<metadata dataType="input" name="_meta2" title="元数据2"  placeholder="元数据测试2"/>
 	</module>
 
+	<module title="归档" name="archive" list="所有归档" add="" comment="文章归档">
+	</module>
+
 	<module title="页面" name="page" list="所有页面" add="新建页面" comment="评论">
 	</module>
 
