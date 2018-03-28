@@ -6,9 +6,17 @@
 </#macro>
 <#macro script>
 $(document).ready(function() {
-  $('code').each(function(i, block) {
-    hljs.highlightBlock(block);
-  });
+    $('pre code').each(function(){
+        var lines = $(this).text().split('\n').length;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for(i=1;i<=lines;i++){
+            $numbering.append($('<li/>').text(i + '.'));
+        }
+    });
+      $('code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
   $('video,audio').mediaelementplayer();
 });
 function reply(id){
@@ -60,6 +68,34 @@ $(document).ready(function(){
 .toc .toc-content {
     margin: 10px;
     font-size: 0.6em;
+}
+
+pre {
+    position: relative;
+    background: #3f3f3f;
+}
+code {
+
+}
+code.has-numbering {
+    margin-left: 35px;
+}
+.pre-numbering {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    background-color: #3f3f3f;
+    text-align: right;
+    color: #ffffff;
+    padding:0.5em;
+}
+ul.pre-numbering > li {
+    list-style: none;
+    margin:0;
+    line-height: 1.2rem;
+    font-size: 1rem;
+    font-weight: normal;
 }
 </#macro>
 <@layout>
