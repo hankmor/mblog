@@ -1,0 +1,17 @@
+<div class="x-white-box">
+	<h3 class="x-box-title">
+		文章归档 <span class="x-title-border"></span>
+	</h3>
+	<@jp.archives module="article" lang="cn" includeContents="false">
+	<#list archives as archive>
+		<div class="x-margin-bottom-10 x-margin-top-10 clearfix">
+			<div class="x-layout-80">
+				<p class="right-box-title">
+					<i class="fa fa-tags" aria-hidden="true"></i>
+					<a href="${archive.url!}">${(archive.date)!}（${archive.count}）</a>
+				</p>
+			</div>
+		</div>
+	</#list> 
+	</@jp.archives>
+</div>

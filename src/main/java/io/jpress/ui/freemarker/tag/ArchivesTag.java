@@ -21,26 +21,31 @@ public class ArchivesTag extends JTag {
 			renderText("");
 			return;
 		}
+		// 语言
+		String lang = getParam("lang", "en");
+		boolean includeContents = Boolean.valueOf(getParam("includeContents", "true"));
 
-		List<Archive> list = ContentQuery.me().findArchives(module);
+		List<Archive> list = ContentQuery.me().findArchives(module, lang);
 		if (list == null || list.isEmpty()) {
 			renderText("");
 			return;
 		}
 
-		List<Content> contents = ContentQuery.me().findArchiveByModule(module);
-		if (contents == null || contents.isEmpty()) {
-			renderText("");
-			return;
-		}
+		if (includeContents) {
+			List<Content> contents = ContentQuery.me().findArchiveByModule(module);
+			if (contents == null || contents.isEmpty()) {
+				renderText("");
+				return;
+			}
 
-		for (Content c : contents) {
-			String archiveDate = c.getStr("archiveDate");
-			if (archiveDate == null)
-				continue;
-			for (Archive a : list) {
-				if (archiveDate.equals(a.getDate())) {
-					a.addData(c);
+			for (Content c : contents) {
+				String archiveDate = c.getStr("archiveDate");
+				if (archiveDate == null)
+					continue;
+				for (Archive a : list) {
+					if (archiveDate.equals(a.getDate())) {
+						a.addData(c);
+					}
 				}
 			}
 		}

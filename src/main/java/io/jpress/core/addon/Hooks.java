@@ -35,6 +35,8 @@ public class Hooks {
 	public static final String CONTENT_RENDER_AFTER = "contentRenderAfter";
 	public static final String MENU_INIT_BEFORE = "menuInitBefore";
 	public static final String MENU_INIT_AFTER = "menuInitAfter";
+	public static final String ARCHIVE_RENDER_BEFORE = "archiveRenderBefore";
+	public static final String ARCHIVE_RENDER_AFTER = "archiveRenderAfter";
 
 	private Map<String, Method> hookMethods = new ConcurrentHashMap<String, Method>();
 	private Addon target;

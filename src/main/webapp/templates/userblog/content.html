@@ -94,7 +94,21 @@ $(document).ready(function(){
               <div class="toc-content"></div>
           </div>
         ${content.text!}
-        
+
+          <div style="margin:30px 0;">
+              <hr>
+          <@jp.previous>
+          <#if previous.title??>
+              <a href="${previous.url}" class="x-pull-left">前一篇：${previous.title}</a>
+          </#if>
+          </@jp.previous>
+          <br>
+          <@jp.next>
+            <#if next.title??>
+                <a href="${next.url}" class="x-pull-left">后一篇：${next.title}</a>
+            </#if>
+          </@jp.next>
+            </div>
         <#if OPTION('jpblog_wechat_pay_enable')?? && OPTION('jpblog_wechat_pay_enable')=='true'>
         <div class="reward-content">
           <p><img src="${CPATH}${OPTION('jpblog_wechat_pay_image')!}"/> </p>
@@ -191,7 +205,8 @@ $(document).ready(function(){
     </div>
  	<#include "_content_box1.html"/> 
 	<#include "_content_box2.html"/> 
-	<#include "_tags_box.html"/> 
+	<#include "_content_box3.html"/>
+	<#include "_tags_box.html"/>
   </div>
 </div>
 </@layout>

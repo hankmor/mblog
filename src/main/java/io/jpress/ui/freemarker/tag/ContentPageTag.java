@@ -40,6 +40,7 @@ public class ContentPageTag extends JTag {
 	String orderBy;
 	List<Taxonomy> taxonomys;
 	HttpServletRequest request;
+	String date;
 
 	public ContentPageTag(HttpServletRequest request, int pageNumber, String moduleName, List<Taxonomy> taxonomys,
 			String orderBy) {
@@ -49,6 +50,14 @@ public class ContentPageTag extends JTag {
 		this.taxonomys = taxonomys;
 		this.orderBy = orderBy;
 	}
+
+    public ContentPageTag(HttpServletRequest request, int pageNumber, String moduleName, String date, String orderBy) {
+        this.request = request;
+        this.pageNumber = pageNumber;
+        this.moduleName = moduleName;
+        this.orderBy = orderBy;
+        this.date = date;
+    }
 
 	@Override
 	public void onRender() {
@@ -81,11 +90,21 @@ public class ContentPageTag extends JTag {
 			}
 		}
 
-		Page<Content> page = ContentQuery.me().paginateInNormal(pageNumber, pagesize, moduleName, taxonomyIds, orderBy);
+		Page<Content> page;
+		if (StringUtils.isNotBlank(date)) {
+            page = ContentQuery.me().paginate(pageNumber, pagesize, null, null, null, null, null, date, orderBy);
+        } else {
+			page = ContentQuery.me().paginateInNormal(pageNumber, pagesize, moduleName, taxonomyIds, orderBy);
+		}
 		setVariable("page", page);
 		setVariable("contents", page.getList());
 
-		ContentPaginateTag pagination = new ContentPaginateTag(request, page, moduleName, taxonomys);
+		ContentPaginateTag pagination;
+		if (StringUtils.isNotBlank(date)) {
+			pagination = new ContentPaginateTag(request, page, moduleName, date);
+		} else {
+			pagination = new ContentPaginateTag(request, page, moduleName, taxonomys);
+		}
 		setVariable("pagination", pagination);
 
 		renderBody();
@@ -94,8 +113,9 @@ public class ContentPageTag extends JTag {
 	public static class ContentPaginateTag extends BasePaginateTag {
 
 		final String moduleName;
-		final List<Taxonomy> taxonomys;
+		List<Taxonomy> taxonomys;
 		final HttpServletRequest request;
+		String date = null;
 
 		public ContentPaginateTag(HttpServletRequest request, Page<Content> page, String moduleName,
 				List<Taxonomy> taxonomys) {
@@ -103,7 +123,13 @@ public class ContentPageTag extends JTag {
 			this.request = request;
 			this.moduleName = moduleName;
 			this.taxonomys = taxonomys;
+		}
 
+		public ContentPaginateTag(HttpServletRequest request, Page<Content> page, String moduleName, String date) {
+			super(page);
+			this.request = request;
+			this.moduleName = moduleName;
+			this.date = date;
 		}
 
 		@Override
@@ -116,6 +142,9 @@ public class ContentPageTag extends JTag {
 				url = url.substring(0, url.length() - 1);
 				url += "-" + pageNumber;
 			} else {
+				if (StringUtils.isNotBlank(date)) {
+					url += date.substring(0, 4) + "年" + date.substring(5, 7) + "月-";
+				}
 				url += pageNumber;
 			}
 

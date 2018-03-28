@@ -15,19 +15,24 @@
  */
 package io.jpress.model.vo;
 
+import com.jfinal.core.JFinal;
+import io.jpress.model.Taxonomy;
+import io.jpress.model.router.TaxonomyRouter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 存档、归档。 和数据库无关的实体类。
- * 
+ *
  * @author 杨福海
  */
 public class Archive {
-
+	public static final String ARCHIVE_TAXONOMY = "archive";
 	private String date; // 日期
 	private long count; // 数量
 	private List<Object> datas; // 数据列表
+	private String url;
 
 	public Archive() {
 	}
@@ -70,4 +75,10 @@ public class Archive {
 		datas.add(o);
 	}
 
+	public String getUrl() {
+		Taxonomy taxonomy = new Taxonomy();
+		taxonomy.setContentModule(ARCHIVE_TAXONOMY);
+		taxonomy.setSlug(this.getDate());
+		return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(taxonomy);
+	}
 }
