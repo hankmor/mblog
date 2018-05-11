@@ -14,7 +14,7 @@ $(document).ready(function() {
             $numbering.append($('<li/>').text(i + '.'));
         }
     });
-      $('code').each(function(i, block) {
+      $('pre > code').each(function(i, block) {
         hljs.highlightBlock(block);
       });
   $('video,audio').mediaelementplayer();
