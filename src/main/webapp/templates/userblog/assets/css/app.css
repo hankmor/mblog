@@ -30,6 +30,19 @@ pre, code, blockquote {
     line-height: 1.2em;
 }
 
+:not(pre)>code {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1px 3px 0;
+    text-shadow: none;
+    white-space: nowrap;
+}
+
+:not(a)>code {
+    color: #6d180b;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
     font-size: 100%;
