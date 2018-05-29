@@ -6,6 +6,17 @@
 </#macro>
 <#macro script>
 $(document).ready(function() {
+    var gitalk = new Gitalk({
+    clientID: 'e735ffffe7110716633c',
+    clientSecret: 'bbf6475a05e0f665049ff9a51890cbc0f465ac8c',
+    repo: 'mblog-comments',
+    owner: 'sunfuchang',
+    admin: ['sunfuchang'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+
     $('pre code').each(function(){
         var lines = $(this).text().split('\n').length;
         var $numbering = $('<ul/>').addClass('pre-numbering');
@@ -39,6 +50,7 @@ $(document).ready(function(){
 </#macro>
 <#macro css_import>
 <link rel="stylesheet" href="${CTPATH}/assets/highlight/styles/zenburn.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 </#macro> 
 <#macro css>
 .login-box-title {
@@ -157,7 +169,10 @@ ul.pre-numbering > li {
     </div>
     <!-- -->
     <#if content.isCommentEnable() >
-    <form action="${CPATH}/comment/submit" method="post"  id="comment">
+    <div class="x-white-box">
+        <div id="gitalk-container"></div>
+    </div>
+    <!--<form action="${CPATH}/comment/submit" method="post"  id="comment">
     <input type="hidden" name="cid" value="${(content.id)!}" >
     <input type="hidden" name="anchor" value="comment" >
     <input type="hidden" id="parent_id" name="parent_id" >
@@ -179,35 +194,35 @@ ul.pre-numbering > li {
         <button type="submit" class="x-button-primary x-border-none pull-right x-margin-top-5">发表评论</button>
       </div>
     </div>
-    </form>
+    </form>-->
     </#if>
     <!-- -->
-    <@jp.commentPage pageSize="10">
-     <#if page ??> 
+    <!--<@jp.commentPage pageSize="10">
+     <#if page ??>
      <div class="x-white-box" id="clist">
       <h3 class="x-box-title">
         全部评论：<span>${page.totalRow!}条</span>
       </h3>
-      
+
 	  <#list page.getList() as comment>
       <div class="x-layout-100 clearfix x-part-border-bottom x-padding-bottom-10 x-padding-top-10">
         <div class="x-pull-left x-layout-10 x-box-border">
         <a href="#">
-        	<img class="x-image-radus x-item-space-4 x-sm-image" src="${CPATH}${comment.avatar!TPATH+'/assets/images/avatar.jpg'}"/> 
+        	<img class="x-image-radus x-item-space-4 x-sm-image" src="${CPATH}${comment.avatar!TPATH+'/assets/images/avatar.jpg'}"/>
         </a>
         </div>
         <div class="x-pull-left x-padding-left-2 x-layout-90 x-box-border comment">
-          <p class="x-margin-bottom-5 x-padding-top-2 x-box-border">${comment.author!} 
+          <p class="x-margin-bottom-5 x-padding-top-2 x-box-border">${comment.author!}
           <span class="x-font-grey">${(comment.created?string("yyyy-MM-dd"))!}</span>
           </p>
-          
+
           <#if comment.qc_content ??>
           <div class="jblog-comment-replay">
           	<h4>引用来之于${comment.qc_author!}的内容</h4>
           	${comment.qc_content!}
           </div>
           </#if>
-          
+
           <p>${comment.text!}</p>
         </div>
         <div class="x-layout-100 clearfix">
@@ -216,7 +231,7 @@ ul.pre-numbering > li {
       </div>
 	  </#list>
     </div>
-    
+
     	<#if (page.totalRow > 10 )>
     	<ul class="x-page">
 			<@pagination anchor="clist">
@@ -228,9 +243,9 @@ ul.pre-numbering > li {
 			</@pagination>
 		</ul>
 		</#if>
-    
+
     </#if>
-     </@jp.commentPage>
+     </@jp.commentPage>-->
     <!-- -->
   </div>
   <!-- -->
