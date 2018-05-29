@@ -28,7 +28,9 @@ $(document).ready(function() {
       $('pre > code').each(function(i, block) {
         hljs.highlightBlock(block);
       });
-  $('video,audio').mediaelementplayer();
+    $('video,audio').mediaelementplayer();
+
+    $('table').wrap('<div style="overflow-x: scroll"></div>');
 });
 function reply(id){
 	$("#parent_id").val(id);
@@ -53,63 +55,6 @@ $(document).ready(function(){
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 </#macro> 
 <#macro css>
-.login-box-title {
-    text-align: right;
-    vertical-align: middle;
-    padding: 0.5rem;
-}
-.login-box input {
-    border: 1px solid #d2d6de;
-    padding: 0.7rem 0.5rem;
-    width: 80%;
-}
-.toc {
-    background: #eee;
-    float: right;
-    margin-left: 10px;
-    margin-bottom:10px;
-    padding: 10px;
-}
-
-.toc .toc-title {
-    margin: 10px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-}
-
-.toc .toc-content {
-    margin: 10px;
-    font-size: 0.8em;
-    line-height:20px;
-}
-
-pre {
-    position: relative;
-    background: #3f3f3f;
-}
-code {
-
-}
-code.has-numbering {
-    margin-left: 35px;
-}
-.pre-numbering {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 25px;
-    background-color: #3f3f3f;
-    text-align: right;
-    color: #ffffff;
-    padding:0.5em;
-}
-ul.pre-numbering > li {
-    list-style: none;
-    margin:0;
-    line-height: 1.2rem;
-    font-size: 1rem;
-    font-weight: normal;
-}
 </#macro>
 <@layout>
 <div class="x-pc-width clearfix x-margin-top-10 x-margin-bottom-10">
@@ -140,6 +85,7 @@ ul.pre-numbering > li {
           <!-- 目录 -->
           <div class="toc">
               <p class="toc-title">目录</p>
+              <hr>
               <div class="toc-content"></div>
           </div>
         ${content.text!}
