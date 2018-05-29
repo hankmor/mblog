@@ -34,20 +34,27 @@
   <div class="x-layout-100 jblog-link">
     <div class="jblog-link-content">
       <ul class="jblog-link-content-left">
-        <li class="x-part-border-left"><a class="x-padding-left-rem1 x-padding-right-rem1" href="${CPATH!}/">首页</a></li>
-        <li class="x-padding-left-rem1 x-padding-right-rem1"><a href="${CPATH!}/about">联系我们</a></li>
+          <li class="website-logo">
+              <a href="${CPATH}">
+                <img src="${CTPATH}/assets/images/guavaer.png">
+                  <span>${WEB_NAME!}</span>
+              </a>
+          </li>
+        <li class="x-part-border-left display"><a class="x-padding-left-rem1 x-padding-right-rem1" href="${CPATH!}/">首页</a></li>
+        <li class="x-padding-left-rem1 x-padding-right-rem1 display"><a href="${CPATH!}/about">联系我们</a></li>
       </ul>
       <ul class="jblog-link-content-right">
-        <li><a href="https://weibo.com/superbugs" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
-        <li><a href="#"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
-        <li class="x-part-border-left"><a href="#"><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
+          <li><a href="#"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
+          <li class="x-part-border-left"><a href="#"><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
+          <li><a href="https://weibo.com/superbugs" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
+          <li><a href="https://github.com/sunfuchang" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a></li>
       </ul>
     </div>
   </div>
   <!-- -->
   <div class="x-layout-100 jblog-link-logo">
     <div class="jblog-link-logo-content">
-      <div class="jblog-link-logo-image"><a href="${CPATH}/">${WEB_NAME!}</a></div>
+      <!--<div class="jblog-link-logo-image"><a href="${CPATH}/">${WEB_NAME!}</a></div>-->
       <div class="jblog-link-logo-adv">
 	      <a href="${OPTION('jpblog_banner_url')!'#'}">
 	      	<img src="${CPATH}${OPTION('jpblog_banner_image')!TPATH+'/assets/images/banner.jpg'}"/>
