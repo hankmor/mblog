@@ -5,7 +5,7 @@
          monitoring="autodetect"
          dynamicConfig="true">
          
-         <!-- 
+         <!--
     <diskStore path="java.io.tmpdir"/>
      	-->
 
@@ -202,5 +202,5 @@
         memoryStoreEvictionPolicy="LFU"
         transactionalMode="off"
          />
-    
+
 </ehcache>
