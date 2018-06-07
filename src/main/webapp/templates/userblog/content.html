@@ -31,6 +31,13 @@ $(document).ready(function() {
     $('video,audio').mediaelementplayer();
 
     $('table').wrap('<div style="overflow-x: scroll"></div>');
+
+    // 空的代码块样式
+    $('pre > code').each(function (i, v) {
+        if (!$(this).hasClass('hljs')) {
+            $(this).addClass('hljs');
+        }
+    });
 });
 function reply(id){
 	$("#parent_id").val(id);

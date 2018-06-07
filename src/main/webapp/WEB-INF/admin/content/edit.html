@@ -41,6 +41,19 @@ function initTinymce(){
 		  ],
         toolbar1: '  bold italic underline strikethrough removeformat | blockquote hr table image media codesample | anchor link   unlink | alignleft aligncenter alignright alignjustify | bullist numlist     ',
         toolbar2: '  formatselect | outdent indent | forecolor backcolor  |  undo redo | code  fullscreen',
+		codesample_languages: [ // codesample插件配置,html/xml高亮转为xml，默认的markup在hilightjs不支持
+		{text: 'Block', value: 'block'},
+		{text: 'Java', value: 'java'},
+		{text: 'JavaScript', value: 'javascript'},
+		{text: 'CSS', value: 'css'},
+		{text: 'HTML/XML', value: 'xml'},
+		{text: 'PHP', value: 'php'},
+		{text: 'Ruby', value: 'ruby'},
+		{text: 'Python', value: 'python'},
+		{text: 'C', value: 'c'},
+		{text: 'C#', value: 'csharp'},
+		{text: 'C++', value: 'cpp'}
+		],
 	});
 }
 
