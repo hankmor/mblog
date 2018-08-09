@@ -6,10 +6,10 @@
 	<#list archives as archive>
 		<div class="x-margin-bottom-10 x-margin-top-10 clearfix">
 			<div class="x-layout-80">
-				<p class="right-box-title">
+				<a href="${archive.url!}" class="right-box-title">
 					<i class="fa fa-tags" aria-hidden="true"></i>
-					<a href="${archive.url!}">${(archive.date)!}（${archive.count}）</a>
-				</p>
+					<span>${(archive.date)!}（${archive.count}）</span>
+				</a>
 			</div>
 		</div>
 	</#list> 

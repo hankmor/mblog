@@ -1,0 +1,18 @@
+<div class="x-white-box">
+	<h3 class="x-box-title">
+		专题栏目 <span class="x-title-border"></span>
+	</h3>
+	<@jp.taxonomys module="article" type="feature">
+
+	<#list taxonomys as taxonomy>
+		<div class="x-margin-bottom-10 x-margin-top-10 clearfix">
+			<div class="x-layout-80">
+				<a href="${taxonomy.url!}" class="right-box-title">
+					<i class="fa fa-book" aria-hidden="true"></i>
+					<span>${taxonomy.title!}</span>
+				</a>
+			</div>
+		</div>
+	</#list>
+	</@jp.taxonomys>
+</div>
