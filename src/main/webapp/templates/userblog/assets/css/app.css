@@ -1820,6 +1820,14 @@ a.x-a-active:hover {
     color: #555;
 }
 
+a.right-box-title:hover {
+    color: #19b5fe;
+}
+
+.right-box-title a:hover {
+    color: #19b5fe;
+}
+
 .image-box {
     position: relative;
     overflow: hidden;
