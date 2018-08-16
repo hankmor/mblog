@@ -2,29 +2,30 @@
 	<h3 class="x-box-title">
 		热门标签 <span class="x-title-border"></span>
 	</h3>
-	<div id="tagCanvasContainer" style="background-color:inherit;width: 100%;">
+	<!--<div id="tagCanvasContainer" style="background-color:inherit;width: 100%;">
 		<canvas id="tagCanvas">
-			<!--<p>Anything in here will be replaced on browsers that support the canvas element</p>-->
+			&lt;!&ndash;<p>Anything in here will be replaced on browsers that support the canvas element</p>&ndash;&gt;
 		</canvas>
-	</div>
+	</div>-->
 	<div id="tags">
 		<ul style="display:none;width: 100%;">
-			<@jp.tags count="50">
+			<@jp.tags count="60">
 			<#list tags as tag>
 				<li>
 					<a href="${tag.url!}">${tag.title!}</a>
 				</li>
 			</#list>
-		</@jp.tags>
+		    </@jp.tags>
 		</ul>
 	</div>
-	<br>
-	<ul class="x-tag">
-		<@jp.tags count="50">
+	<!--<br>-->
+    <div id="tags-cloud" class="" style="width: 270px;height: 600px;"></div>
+	<!--<ul class="x-tag">-->
+		<!--<@jp.tags count="50">
 			<#list tags as tag>
 			<li>
 				<a href="${tag.url!}">${tag.title!}</a>
 			</li>
-			</#list> 
-		</@jp.tags >
+			</#list>
+		</@jp.tags >-->
 </div>

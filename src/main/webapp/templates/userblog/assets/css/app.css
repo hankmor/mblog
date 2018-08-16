@@ -1647,6 +1647,7 @@ a.x-a-active:hover {
 .x-tag {
     width: 100%;
     overflow: hidden;
+    height: auto;
 }
 
 .x-tag > li {
