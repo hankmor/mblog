@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="${CTPATH}/assets/css/app.css"/>
   <link rel="stylesheet" href="${CTPATH}/assets/font-awesome/css/font-awesome.min.css"/>
   <link rel="stylesheet" href="${CTPATH}/assets/mediaelement/mediaelementplayer.css" />
+  <link rel="stylesheet" href="${CTPATH}/assets/jqcloud/jqcloud.css" />
   <@css_import />
   <#if css ??>
   	<style type="text/css">
@@ -99,24 +100,43 @@ ${OPTION('jpblog_statistical_code')!}
   <script src="${CTPATH}/assets/js/jquery-2.1.1.min.js"></script>
   <script src="${CTPATH}/assets/mediaelement/mediaelement-and-player.min.js"></script>
   <script src="${CTPATH}/assets/js/jquery.tagcanvas.min.js"></script>
+  <script src="${CTPATH}/assets/jqcloud/jqcloud-1.0.4.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <script type="text/javascript">
 <@script />
 $(document).ready(function() {
-    var w = $('#tagCanvasContainer').width();
-    $('#tagCanvas').attr("width", w);
-    $('#tagCanvas').attr("height", w);
-    if(!$('#tagCanvas').tagcanvas({
-            textColour: '#09bb07',
-            outlineColour: '#00ff00',
-            reverse: true,
-            depth: 0.8,
-            textFont: "Microsoft YaHei, Open Sans",
-            weight: false,
-            maxSpeed: 0.05
-        }, 'tags')) {
-        $('#tagCanvasContainer').hide();
+//    var w = $('#tagCanvasContainer').width();
+//    $('#tagCanvas').attr("width", w);
+//    $('#tagCanvas').attr("height", w);
+//    if (!$('#tagCanvas').tagcanvas({
+//            textColour: '#19b5fe',
+//            outlineColour: '#0df',
+//            reverse: true,
+//            depth: 0.8,
+//            textFont: "Microsoft YaHei, Open Sans",
+//            weight: false,
+//            maxSpeed: 0.05
+//        }, 'tags')
+//    ) {
+//        $('#tagCanvasContainer').hide();
+//    }
+
+    var wordArray = $('#tags a').map(function () {
+        var a = $(this);
+        return {'text': a.text(), 'link': a.attr('href')};
+    });
+    var len = wordArray.length;
+    var w = 1;
+    for (var i = 0; i < wordArray.length; i++) {
+        var obj = wordArray[i];
+        if (w >= 10) w = 1;
+        if (i % ++w == 0) {
+            obj.weight = parseInt(Math.random() * 2 + 1) + w;
+        } else {
+            obj.weight = parseInt(Math.random() * 2 + 1);
+        }
     }
+    $('#tags-cloud').jQCloud(wordArray);
 });
 
 (function(){
