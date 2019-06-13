@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,57 +28,57 @@ import java.util.List;
  * @author 杨福海
  */
 public class Archive {
-	public static final String ARCHIVE_TAXONOMY = "archive";
-	private String date; // 日期
-	private long count; // 数量
-	private List<Object> datas; // 数据列表
-	private String url;
+    public static final String ARCHIVE_TAXONOMY = "archive";
+    private String date; // 日期
+    private long count; // 数量
+    private List<Object> datas; // 数据列表
+    private String url;
 
-	public Archive() {
-	}
+    public Archive() {
+    }
 
-	public Archive(String date, long count) {
-		super();
-		this.date = date;
-		this.count = count;
-	}
+    public Archive(String date, long count) {
+        super();
+        this.date = date;
+        this.count = count;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public long getCount() {
-		return count;
-	}
+    public long getCount() {
+        return count;
+    }
 
-	public void setCount(long count) {
-		this.count = count;
-	}
+    public void setCount(long count) {
+        this.count = count;
+    }
 
-	public List<Object> getDatas() {
-		return datas;
-	}
+    public List<Object> getDatas() {
+        return datas;
+    }
 
-	public void setDatas(List<Object> datas) {
-		this.datas = datas;
-	}
+    public void setDatas(List<Object> datas) {
+        this.datas = datas;
+    }
 
-	public void addData(Object o) {
-		if (datas == null) {
-			datas = new ArrayList<Object>();
-		}
+    public void addData(Object o) {
+        if (datas == null) {
+            datas = new ArrayList<Object>();
+        }
 
-		datas.add(o);
-	}
+        datas.add(o);
+    }
 
-	public String getUrl() {
-		Taxonomy taxonomy = new Taxonomy();
-		taxonomy.setContentModule(ARCHIVE_TAXONOMY);
-		taxonomy.setSlug(this.getDate());
-		return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(taxonomy);
-	}
+    public String getUrl() {
+        Taxonomy taxonomy = new Taxonomy();
+        taxonomy.setContentModule(ARCHIVE_TAXONOMY);
+        taxonomy.setSlug(this.getDate());
+        return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(taxonomy);
+    }
 }
