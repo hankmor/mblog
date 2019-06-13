@@ -92,7 +92,7 @@ public class ContentPageTag extends JTag {
 
 		Page<Content> page;
 		if (StringUtils.isNotBlank(date)) {
-            page = ContentQuery.me().paginate(pageNumber, pagesize, null, null, null, null, null, date, orderBy);
+            page = ContentQuery.me().paginate(pageNumber, pagesize, null, null, Content.STATUS_NORMAL, null, null, date, orderBy);
         } else {
 			page = ContentQuery.me().paginateInNormal(pageNumber, pagesize, moduleName, taxonomyIds, orderBy);
 		}

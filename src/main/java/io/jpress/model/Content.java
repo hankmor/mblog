@@ -41,8 +41,11 @@ import java.util.Set;
 @Table(tableName = "content", primaryKey = "id")
 public class Content extends BaseContent<Content> implements ISortModel<Content> {
 
+	// 删除
 	public static String STATUS_DELETE = "delete";
+	// 草稿
 	public static String STATUS_DRAFT = "draft";
+	// 发布
 	public static String STATUS_NORMAL = "normal";
 
 	public static String COMMENT_STATUS_OPEN = "open";
