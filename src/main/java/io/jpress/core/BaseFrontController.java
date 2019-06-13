@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,142 +15,156 @@
  */
 package io.jpress.core;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.Controller;
 import io.jpress.template.TemplateManager;
 import io.jpress.utils.StringUtils;
 
+import java.io.BufferedReader;
+
 public class BaseFrontController extends JBaseController {
 
-	private static final String FILE_SEPARATOR = "_";
-	private String renderFile = null;
+    private static final String FILE_SEPARATOR = "_";
+    private String renderFile = null;
 
-	public void render(String name) {
+    public void render(String name) {
 
-		renderFile = null;
+        renderFile = null;
 
-		initRenderFile(name);
+        initRenderFile(name);
 
-		if (renderFile != null) {
-			super.render(renderFile);
-		} else {
-			renderError(404);
-		}
+        if (renderFile != null) {
+            super.render(renderFile);
+        } else {
+            renderError(404);
+        }
 
-	}
+    }
 
-	private void initRenderFile(String name) {
-		if (isWechatBrowser()) {
-			initWechatFile(name);
+    private void initRenderFile(String name) {
+        if (isWechatBrowser()) {
+            initWechatFile(name);
 
-			if (renderFile == null) {
-				initMobileFile(name);
-			}
-		}
+            if (renderFile == null) {
+                initMobileFile(name);
+            }
+        }
 
-		if (isMoblieBrowser()) {
-			initMobileFile(name);
-		}
+        if (isMoblieBrowser()) {
+            initMobileFile(name);
+        }
 
-		if (renderFile == null) {
-			initNormalFile(name);
-		}
-	}
+        if (renderFile == null) {
+            initNormalFile(name);
+        }
+    }
 
-	public boolean templateExists(String file) {
-		boolean isExists = false;
-		if (isWechatBrowser()) {
-			isExists = TemplateManager.me().existsFileInWechat(file);
+    public boolean templateExists(String file) {
+        boolean isExists = false;
+        if (isWechatBrowser()) {
+            isExists = TemplateManager.me().existsFileInWechat(file);
 
-			if (!isExists) {
-				isExists = TemplateManager.me().existsFileInMobile(file);
-			}
-		}
+            if (!isExists) {
+                isExists = TemplateManager.me().existsFileInMobile(file);
+            }
+        }
 
-		if (isMoblieBrowser()) {
-			isExists = TemplateManager.me().existsFileInMobile(file);
-		}
+        if (isMoblieBrowser()) {
+            isExists = TemplateManager.me().existsFileInMobile(file);
+        }
 
-		if (!isExists) {
-			isExists = TemplateManager.me().existsFile(file);
-		}
+        if (!isExists) {
+            isExists = TemplateManager.me().existsFile(file);
+        }
 
-		return isExists;
-	}
+        return isExists;
+    }
 
-	private void initWechatFile(String name) {
-		if (name.contains(FILE_SEPARATOR)) {
-			do {
-				if (TemplateManager.me().existsFileInWechat(name)) {
-					renderFile = buildWechatPath(name);
-					return;
-				}
-				name = clearProp(name);
-			} while (name.contains(FILE_SEPARATOR));
-		}
+    private void initWechatFile(String name) {
+        if (name.contains(FILE_SEPARATOR)) {
+            do {
+                if (TemplateManager.me().existsFileInWechat(name)) {
+                    renderFile = buildWechatPath(name);
+                    return;
+                }
+                name = clearProp(name);
+            } while (name.contains(FILE_SEPARATOR));
+        }
 
-		if (TemplateManager.me().existsFileInWechat(name)) {
-			renderFile = buildWechatPath(name);
-		}
-	}
+        if (TemplateManager.me().existsFileInWechat(name)) {
+            renderFile = buildWechatPath(name);
+        }
+    }
 
-	private void initMobileFile(String name) {
-		if (name.contains(FILE_SEPARATOR)) {
-			do {
-				if (TemplateManager.me().existsFileInMobile(name)) {
-					renderFile = buildMobilePath(name);
-					return;
-				}
-				name = clearProp(name);
-			} while (name.contains(FILE_SEPARATOR));
-		}
+    private void initMobileFile(String name) {
+        if (name.contains(FILE_SEPARATOR)) {
+            do {
+                if (TemplateManager.me().existsFileInMobile(name)) {
+                    renderFile = buildMobilePath(name);
+                    return;
+                }
+                name = clearProp(name);
+            } while (name.contains(FILE_SEPARATOR));
+        }
 
-		if (TemplateManager.me().existsFileInMobile(name)) {
-			renderFile = buildMobilePath(name);
-		}
-	}
+        if (TemplateManager.me().existsFileInMobile(name)) {
+            renderFile = buildMobilePath(name);
+        }
+    }
 
-	private void initNormalFile(String name) {
-		if (name.contains(FILE_SEPARATOR)) {
-			do {
-				if (TemplateManager.me().existsFile(name)) {
-					renderFile = buildPath(name);
-					return;
-				}
-				name = clearProp(name);
-			} while (name.contains(FILE_SEPARATOR));
-		}
+    private void initNormalFile(String name) {
+        if (name.contains(FILE_SEPARATOR)) {
+            do {
+                if (TemplateManager.me().existsFile(name)) {
+                    renderFile = buildPath(name);
+                    return;
+                }
+                name = clearProp(name);
+            } while (name.contains(FILE_SEPARATOR));
+        }
 
-		if (TemplateManager.me().existsFile(name)) {
-			renderFile = buildPath(name);
-			return;
-		}
+        if (TemplateManager.me().existsFile(name)) {
+            renderFile = buildPath(name);
+            return;
+        }
 
-	}
+    }
 
-	private String buildPath(String name) {
-		return TemplateManager.me().currentTemplate().getPath() + "/" + name;
-	}
+    private String buildPath(String name) {
+        return TemplateManager.me().currentTemplate().getPath() + "/" + name;
+    }
 
-	private String buildWechatPath(String name) {
-		return TemplateManager.me().currentTemplate().getPath() + "/tpl_wechat/" + name;
-	}
+    private String buildWechatPath(String name) {
+        return TemplateManager.me().currentTemplate().getPath() + "/tpl_wechat/" + name;
+    }
 
-	private String buildMobilePath(String name) {
-		return TemplateManager.me().currentTemplate().getPath() + "/tpl_mobile/" + name;
-	}
+    private String buildMobilePath(String name) {
+        return TemplateManager.me().currentTemplate().getPath() + "/tpl_mobile/" + name;
+    }
 
-	public String clearProp(String fname) {
-		return fname.substring(0, fname.lastIndexOf(FILE_SEPARATOR)) + ".html";
-	}
+    public String clearProp(String fname) {
+        return fname.substring(0, fname.lastIndexOf(FILE_SEPARATOR)) + ".html";
+    }
 
-	@Override
-	public Controller keepPara() {
-		super.keepPara();
-		String gotoUrl = getPara("goto");
-		if (StringUtils.isNotBlank(gotoUrl)) {
-			setAttr("goto", StringUtils.urlEncode(gotoUrl));
-		}
-		return this;
-	}
+    @Override
+    public Controller keepPara() {
+        super.keepPara();
+        String gotoUrl = getPara("goto");
+        if (StringUtils.isNotBlank(gotoUrl)) {
+            setAttr("goto", StringUtils.urlEncode(gotoUrl));
+        }
+        return this;
+    }
 
+
+    protected <T> T getRequestObject(Class<T> valueType) throws Exception {
+        StringBuilder json = new StringBuilder();
+        BufferedReader reader = this.getRequest().getReader();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            json.append(line);
+        }
+        reader.close();
+        return JSONObject.parseObject(json.toString(), valueType);
+    }
 }
