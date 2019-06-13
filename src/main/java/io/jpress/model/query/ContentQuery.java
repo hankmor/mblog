@@ -542,7 +542,7 @@ public class ContentQuery extends JBaseQuery {
             dateFmt = "%Y年%m月";
         }
         String sql = "SELECT DATE_FORMAT( c.created, \"" + dateFmt + "\" ) as d, COUNT( * ) count FROM content c"
-                + " WHERE c.module = ? and c.status = '" + Content.STATUS_DRAFT + "' GROUP BY d order by d desc";
+                + " WHERE c.module = ? and c.status = '" + Content.STATUS_NORMAL + "' GROUP BY d order by d desc";
         List<Record> list = Jdb.find(sql, module);
         if (list == null || list.isEmpty())
             return null;

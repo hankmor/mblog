@@ -4,7 +4,11 @@
 	</h3>
 	<@jp.archives module="article" lang="cn" includeContents="false">
 	<#list archives as archive>
+		<#if (archive_index gt 9)>
+		<div class="x-margin-bottom-10 x-margin-top-10 clearfix hide" style="display: none">
+		<#else>
 		<div class="x-margin-bottom-10 x-margin-top-10 clearfix">
+		</#if>
 			<div class="x-layout-80">
 				<a href="${archive.url!}" class="right-box-title">
 					<i class="fa fa-tags" aria-hidden="true"></i>
@@ -12,6 +16,23 @@
 				</a>
 			</div>
 		</div>
-	</#list> 
+	</#list>
+	<#if archives?size gt 10>
+		<div class="x-margin-bottom-10 x-margin-top-10 clearfix">
+			<a href="javascript:;" onclick="toggleDisplay(this)" class="right-box-title" style="color:#19b5fe">更多</a>
+		</div>
+	</#if>
 	</@jp.archives>
+	<script type="text/javascript">
+		function toggleDisplay(el) {
+            var $this = $(el);
+            if ($this.text() === '更多') {
+                $('.x-margin-bottom-10.hide').css('display', 'block');
+                $this.text('收起');
+            } else {
+                $('.x-margin-bottom-10.hide').css('display', 'none');
+                $this.text('更多');
+			}
+		}
+	</script>
 </div>
