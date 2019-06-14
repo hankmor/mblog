@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,9 @@
  */
 package io.jpress.admin.controller;
 
-import java.util.List;
-
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.plugin.activerecord.Page;
-
 import io.jpress.Consts;
 import io.jpress.core.JBaseController;
 import io.jpress.core.interceptor.ActionCacheClearInterceptor;
@@ -36,74 +33,76 @@ import io.jpress.model.query.ContentQuery;
 import io.jpress.model.query.UserQuery;
 import io.jpress.router.RouterMapping;
 import io.jpress.router.RouterNotAllowConvert;
-import io.jpress.template.TplModule;
 import io.jpress.template.TemplateManager;
+import io.jpress.template.TplModule;
 import io.jpress.utils.CookieUtils;
 import io.jpress.utils.EncryptUtils;
 import io.jpress.utils.StringUtils;
+
+import java.util.List;
 
 @RouterMapping(url = "/admin", viewPath = "/WEB-INF/admin")
 @RouterNotAllowConvert
 public class _AdminController extends JBaseController {
 
-	@Before(ActionCacheClearInterceptor.class)
-	public void index() {
-		
-		List<TplModule> moduleList = TemplateManager.me().currentTemplateModules();
-		setAttr("modules", moduleList);
+    @Before(ActionCacheClearInterceptor.class)
+    public void index() {
 
-		if (moduleList != null && moduleList.size() > 0) {
-			String moduels[] = new String[moduleList.size()];
-			for (int i = 0; i < moduleList.size(); i++) {
-				moduels[i] = moduleList.get(i).getName();
-			}
+        List<TplModule> moduleList = TemplateManager.me().currentTemplateModules();
+        setAttr("modules", moduleList);
 
-			List<Content> contents = ContentQuery.me().findListInNormal(1, 20, null, null, null, null, moduels, null,
-					null, null, null, null, null, null, null);
-			setAttr("contents", contents);
-		}
+        if (moduleList != null && moduleList.size() > 0) {
+            String moduels[] = new String[moduleList.size()];
+            for (int i = 0; i < moduleList.size(); i++) {
+                moduels[i] = moduleList.get(i).getName();
+            }
 
-		Page<Comment> commentPage = CommentQuery.me().paginateWithContentNotInDelete(1, 10, null, null, null, null);
-		if (commentPage != null) {
-			setAttr("comments", commentPage.getList());
-		}
+            List<Content> contents = ContentQuery.me().findListInNormal(1, 20, null, null, null, null, moduels, null,
+                    null, null, null, null, null, null, null);
+            setAttr("contents", contents);
+        }
 
-		render("index.html");
-	}
+        Page<Comment> commentPage = CommentQuery.me().paginateWithContentNotInDelete(1, 10, null, null, null, null);
+        if (commentPage != null) {
+            setAttr("comments", commentPage.getList());
+        }
 
-	@Clear(AdminInterceptor.class)
-	public void login() {
-		String username = getPara("username");
-		String password = getPara("password");
+        render("index.html");
+    }
 
-		if (!StringUtils.areNotEmpty(username, password)) {
-			render("login.html");
-			return;
-		}
+    @Clear(AdminInterceptor.class)
+    public void login() {
+        String username = getPara("username");
+        String password = getPara("password");
 
-		User user = UserQuery.me().findUserByUsername(username);
+        if (!StringUtils.areNotEmpty(username, password)) {
+            render("login.html");
+            return;
+        }
 
-		if (null == user) {
-			renderAjaxResultForError("没有该用户");
-			return;
-		}
+        User user = UserQuery.me().findUserByUsername(username);
 
-		if (EncryptUtils.verlifyUser(user.getPassword(), user.getSalt(), password) && user.isAdministrator()) {
+        if (null == user) {
+            renderAjaxResultForError("没有该用户");
+            return;
+        }
 
-			MessageKit.sendMessage(Actions.USER_LOGINED, user);
+        if (EncryptUtils.verlifyUser(user.getPassword(), user.getSalt(), password) && user.isAdministrator()) {
 
-			CookieUtils.put(this, Consts.COOKIE_LOGINED_USER, user.getId().toString());
+            MessageKit.sendMessage(Actions.USER_LOGINED, user);
 
-			renderAjaxResultForSuccess("登录成功");
-		} else {
-			renderAjaxResultForError("密码错误");
-		}
-	}
+            CookieUtils.put(this, Consts.COOKIE_LOGINED_USER, user.getId().toString());
 
-	@Before(UCodeInterceptor.class)
-	public void logout() {
-		CookieUtils.remove(this, Consts.COOKIE_LOGINED_USER);
-		redirect("/admin");
-	}
+            renderAjaxResultForSuccess("登录成功");
+        } else {
+            renderAjaxResultForError("密码错误");
+        }
+    }
+
+    @Before(UCodeInterceptor.class)
+    public void logout() {
+        CookieUtils.remove(this, Consts.COOKIE_LOGINED_USER);
+        redirect("/admin");
+    }
 
 }

@@ -1819,6 +1819,10 @@ a.x-a-active:hover {
     height: auto;
     overflow: hidden;
     color: #555;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 a.right-box-title:hover {

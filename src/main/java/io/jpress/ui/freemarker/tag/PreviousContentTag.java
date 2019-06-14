@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,27 +20,27 @@ import io.jpress.model.Content;
 import io.jpress.model.query.ContentQuery;
 
 public class PreviousContentTag extends JTag {
-	
-	public static final String TAG_NAME = "jp.previous";
 
-	private Content currentContent;
+    public static final String TAG_NAME = "jp.previous";
 
-	public PreviousContentTag(Content content) {
-		this.currentContent = content;
-	}
+    private Content currentContent;
 
-	@Override
-	public void onRender() {
+    public PreviousContentTag(Content content) {
+        this.currentContent = content;
+    }
 
-		Content content = ContentQuery.me().findPrevious(currentContent);
+    @Override
+    public void onRender() {
 
-		if (content == null) {
-			renderText("");
-			return;
-		}
+        Content content = ContentQuery.me().findPrevious(currentContent);
 
-		setVariable("previous", content);
-		renderBody();
-	}
+        if (content == null) {
+            renderText("");
+            return;
+        }
+
+        setVariable("previous", content);
+        renderBody();
+    }
 
 }

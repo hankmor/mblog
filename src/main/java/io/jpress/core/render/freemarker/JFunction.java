@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,107 +25,107 @@ import java.util.List;
 
 public abstract class JFunction implements TemplateMethodModelEx {
 
-	private List<?> argList;
+    private List<?> argList;
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object exec(List args) throws TemplateModelException {
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Object exec(List args) throws TemplateModelException {
 
-		argList = args;
+        argList = args;
 
-		return onExec();
-	}
+        return onExec();
+    }
 
-	public abstract Object onExec();
+    public abstract Object onExec();
 
-	public Object get(int index) {
-		if (null == argList || argList.size() == 0)
-			return null;
+    public Object get(int index) {
+        if (null == argList || argList.size() == 0)
+            return null;
 
-		if (index > argList.size() - 1)
-			return null;
+        if (index > argList.size() - 1)
+            return null;
 
-		Object obj = argList.get(index);
-		if (obj instanceof BeanModel) {
-			return ((BeanModel) obj).getWrappedObject();
-		}
+        Object obj = argList.get(index);
+        if (obj instanceof BeanModel) {
+            return ((BeanModel) obj).getWrappedObject();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public StringModel getToStringModel(int index) {
-		if (null == argList || argList.size() == 0)
-			return null;
+    public StringModel getToStringModel(int index) {
+        if (null == argList || argList.size() == 0)
+            return null;
 
-		if (index > argList.size() - 1)
-			return null;
+        if (index > argList.size() - 1)
+            return null;
 
-		return (StringModel) argList.get(index);
-	}
+        return (StringModel) argList.get(index);
+    }
 
-	public String getToString(int index) {
-		if (null == argList || argList.size() == 0)
-			return null;
+    public String getToString(int index) {
+        if (null == argList || argList.size() == 0)
+            return null;
 
-		if (index > argList.size() - 1)
-			return null;
+        if (index > argList.size() - 1)
+            return null;
 
-		if (argList.get(index) == null)
-			return null;
+        if (argList.get(index) == null)
+            return null;
 
-		return argList.get(index).toString();
-	}
+        return argList.get(index).toString();
+    }
 
-	public String getToString(int index, String defaultValue) {
-		if (null == argList || argList.size() == 0)
-			return defaultValue;
+    public String getToString(int index, String defaultValue) {
+        if (null == argList || argList.size() == 0)
+            return defaultValue;
 
-		if (index > argList.size() - 1)
-			return defaultValue;
+        if (index > argList.size() - 1)
+            return defaultValue;
 
-		return argList.get(index).toString();
-	}
+        return argList.get(index).toString();
+    }
 
-	public Long getToLong(int index) {
+    public Long getToLong(int index) {
 
-		String stringValue = getToString(index);
+        String stringValue = getToString(index);
 
-		if (null == stringValue || "".equals(stringValue.trim())) {
-			return null;
-		}
+        if (null == stringValue || "".equals(stringValue.trim())) {
+            return null;
+        }
 
-		return Long.parseLong(stringValue);
-	}
+        return Long.parseLong(stringValue);
+    }
 
-	public Long getToLong(int index, long defaultValue) {
-		String stringValue = getToString(index);
+    public Long getToLong(int index, long defaultValue) {
+        String stringValue = getToString(index);
 
-		if (null == stringValue) {
-			return defaultValue;
-		}
+        if (null == stringValue) {
+            return defaultValue;
+        }
 
-		return Long.parseLong(stringValue);
-	}
+        return Long.parseLong(stringValue);
+    }
 
-	public BigInteger getToBigInteger(int index) {
+    public BigInteger getToBigInteger(int index) {
 
-		String stringValue = getToString(index);
+        String stringValue = getToString(index);
 
-		if (null == stringValue || "".equals(stringValue.trim())) {
-			return null;
-		}
+        if (null == stringValue || "".equals(stringValue.trim())) {
+            return null;
+        }
 
-		return new BigInteger(stringValue);
-	}
+        return new BigInteger(stringValue);
+    }
 
-	public BigInteger getToBigInteger(int index, BigInteger defaultValue) {
-		String stringValue = getToString(index);
+    public BigInteger getToBigInteger(int index, BigInteger defaultValue) {
+        String stringValue = getToString(index);
 
-		if (null == stringValue) {
-			return defaultValue;
-		}
+        if (null == stringValue) {
+            return defaultValue;
+        }
 
-		return new BigInteger(stringValue);
-	}
+        return new BigInteger(stringValue);
+    }
 
 }

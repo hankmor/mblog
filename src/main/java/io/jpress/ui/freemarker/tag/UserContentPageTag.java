@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,62 +26,62 @@ import io.jpress.utils.StringUtils;
 import java.math.BigInteger;
 
 public class UserContentPageTag extends JTag {
-	
-	public static final String TAG_NAME = "jp.userContentPage";
 
-	BigInteger userId;
-	int pageNumber;
-	String action;
+    public static final String TAG_NAME = "jp.userContentPage";
 
-	public UserContentPageTag(String action, BigInteger userId, int pageNumber) {
-		this.userId = userId;
-		this.pageNumber = pageNumber;
-		this.action = action;
-	}
+    BigInteger userId;
+    int pageNumber;
+    String action;
 
-	@Override
-	public void onRender() {
+    public UserContentPageTag(String action, BigInteger userId, int pageNumber) {
+        this.userId = userId;
+        this.pageNumber = pageNumber;
+        this.action = action;
+    }
 
-		String module = getParam("module");
-		BigInteger taxonomyId = getParamToBigInteger("taxonomyId");
+    @Override
+    public void onRender() {
 
-		int pageSize = getParamToInt("pageSize", 10);
-		String orderby = getParam("orderBy");
-		String status = getParam("status", Content.STATUS_NORMAL);
+        String module = getParam("module");
+        BigInteger taxonomyId = getParamToBigInteger("taxonomyId");
 
-		BigInteger[] tids = taxonomyId == null ? null : new BigInteger[] { taxonomyId };
+        int pageSize = getParamToInt("pageSize", 10);
+        String orderby = getParam("orderBy");
+        String status = getParam("status", Content.STATUS_NORMAL);
 
-		Page<Content> page = ContentQuery.me().paginate(pageNumber, pageSize, module, null, status, tids, userId,orderby);
-		setVariable("page", page);
-		setVariable("contents", page.getList());
-		
-		MyPaginateTag pagination = new MyPaginateTag(page, action);
-		setVariable("pagination", pagination);
-		
-		renderBody();
-	}
+        BigInteger[] tids = taxonomyId == null ? null : new BigInteger[]{taxonomyId};
 
-	public static class MyPaginateTag extends BasePaginateTag {
+        Page<Content> page = ContentQuery.me().paginate(pageNumber, pageSize, module, null, status, tids, userId, orderby);
+        setVariable("page", page);
+        setVariable("contents", page.getList());
 
-		final String action;
+        MyPaginateTag pagination = new MyPaginateTag(page, action);
+        setVariable("pagination", pagination);
 
-		public MyPaginateTag(Page<Content> page, String action) {
-			super(page);
-			this.action = action;
-		}
+        renderBody();
+    }
 
-		@Override
-		protected String getUrl(int pageNumber) {
-			String url = JFinal.me().getContextPath() + "/user/center/";
-			url += action;
-			url += "-" + pageNumber;
+    public static class MyPaginateTag extends BasePaginateTag {
 
-			if (StringUtils.isNotBlank(getAnchor())) {
-				url += "#" + getAnchor();
-			}
-			return url;
-		}
+        final String action;
 
-	}
+        public MyPaginateTag(Page<Content> page, String action) {
+            super(page);
+            this.action = action;
+        }
+
+        @Override
+        protected String getUrl(int pageNumber) {
+            String url = JFinal.me().getContextPath() + "/user/center/";
+            url += action;
+            url += "-" + pageNumber;
+
+            if (StringUtils.isNotBlank(getAnchor())) {
+                url += "#" + getAnchor();
+            }
+            return url;
+        }
+
+    }
 
 }
