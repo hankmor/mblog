@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,58 +24,58 @@ import io.jpress.plugin.search.SearcherKit;
 import io.jpress.utils.StringUtils;
 
 public class SearchResultPageTag extends JTag {
-	
-	public static final String TAG_NAME = "jp.searchResultPage";
-	
-	int pageNumber;
-	String moduleName;
-	String keyword;
 
-	public SearchResultPageTag(String keyword, String moduleName, int pageNumber) {
-		this.pageNumber = pageNumber;
-		this.moduleName = moduleName;
-		this.keyword = keyword;
-	}
+    public static final String TAG_NAME = "jp.searchResultPage";
 
-	@Override
-	public void onRender() {
+    int pageNumber;
+    String moduleName;
+    String keyword;
 
-		int pagesize = getParamToInt("pageSize", 10);
+    public SearchResultPageTag(String keyword, String moduleName, int pageNumber) {
+        this.pageNumber = pageNumber;
+        this.moduleName = moduleName;
+        this.keyword = keyword;
+    }
 
-		Page<SearcherBean> page = SearcherKit.search(keyword, moduleName, pageNumber, pagesize);
-		setVariable("page", page);
-		setVariable("searcherBeans", page.getList());
+    @Override
+    public void onRender() {
 
-		MyPaginateTag pagination = new MyPaginateTag(page, keyword, moduleName);
-		setVariable("pagination", pagination);
+        int pagesize = getParamToInt("pageSize", 10);
 
-		renderBody();
-	}
+        Page<SearcherBean> page = SearcherKit.search(keyword, moduleName, pageNumber, pagesize);
+        setVariable("page", page);
+        setVariable("searcherBeans", page.getList());
 
-	public static class MyPaginateTag extends BasePaginateTag {
+        MyPaginateTag pagination = new MyPaginateTag(page, keyword, moduleName);
+        setVariable("pagination", pagination);
 
-		final String keyword;
-		final String moduleName;
+        renderBody();
+    }
 
-		public MyPaginateTag(Page<SearcherBean> page, String keyword, String moduleName) {
-			super(page);
-			this.keyword = keyword;
-			this.moduleName = moduleName;
-		}
+    public static class MyPaginateTag extends BasePaginateTag {
 
-		@Override
-		protected String getUrl(int pageNumber) {
-			String url = JFinal.me().getContextPath() + "/s?";
-			url += "m=" + (StringUtils.isNotBlank(moduleName) ? moduleName.trim() : "");
-			url += "&k=" + StringUtils.urlDecode(keyword);
-			url += "&p=" + pageNumber;
+        final String keyword;
+        final String moduleName;
 
-			if (StringUtils.isNotBlank(getAnchor())) {
-				url += "#" + getAnchor();
-			}
-			return url;
-		}
+        public MyPaginateTag(Page<SearcherBean> page, String keyword, String moduleName) {
+            super(page);
+            this.keyword = keyword;
+            this.moduleName = moduleName;
+        }
 
-	}
+        @Override
+        protected String getUrl(int pageNumber) {
+            String url = JFinal.me().getContextPath() + "/s?";
+            url += "m=" + (StringUtils.isNotBlank(moduleName) ? moduleName.trim() : "");
+            url += "&k=" + StringUtils.urlDecode(keyword);
+            url += "&p=" + pageNumber;
+
+            if (StringUtils.isNotBlank(getAnchor())) {
+                url += "#" + getAnchor();
+            }
+            return url;
+        }
+
+    }
 
 }

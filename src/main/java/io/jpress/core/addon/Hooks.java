@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,54 +23,54 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Hooks {
-	private static final Log log = Log.getLog(Hooks.class);
-	public static final String ROUTER_CONVERTE = "routerConverte";
-	public static final String PROCESS_CONTROLLER = "processController";
-	public static final String INTERCEPT = "intercept";
-	public static final String INDEX_RENDER_BEFORE = "indexRenderBefore";
-	public static final String INDEX_RENDER_AFTER = "indexRenderAfter";
-	public static final String TAXONOMY_RENDER_BEFORE = "taxonomyRenderBefore";
-	public static final String TAXONOMY_RENDER_AFTER = "taxonomyRenderAfter";
-	public static final String CONTENT_RENDER_BEFORE = "contentRenderBefore";
-	public static final String CONTENT_RENDER_AFTER = "contentRenderAfter";
-	public static final String MENU_INIT_BEFORE = "menuInitBefore";
-	public static final String MENU_INIT_AFTER = "menuInitAfter";
-	public static final String ARCHIVE_RENDER_BEFORE = "archiveRenderBefore";
-	public static final String ARCHIVE_RENDER_AFTER = "archiveRenderAfter";
+    private static final Log log = Log.getLog(Hooks.class);
+    public static final String ROUTER_CONVERTE = "routerConverte";
+    public static final String PROCESS_CONTROLLER = "processController";
+    public static final String INTERCEPT = "intercept";
+    public static final String INDEX_RENDER_BEFORE = "indexRenderBefore";
+    public static final String INDEX_RENDER_AFTER = "indexRenderAfter";
+    public static final String TAXONOMY_RENDER_BEFORE = "taxonomyRenderBefore";
+    public static final String TAXONOMY_RENDER_AFTER = "taxonomyRenderAfter";
+    public static final String CONTENT_RENDER_BEFORE = "contentRenderBefore";
+    public static final String CONTENT_RENDER_AFTER = "contentRenderAfter";
+    public static final String MENU_INIT_BEFORE = "menuInitBefore";
+    public static final String MENU_INIT_AFTER = "menuInitAfter";
+    public static final String ARCHIVE_RENDER_BEFORE = "archiveRenderBefore";
+    public static final String ARCHIVE_RENDER_AFTER = "archiveRenderAfter";
 
-	private Map<String, Method> hookMethods = new ConcurrentHashMap<String, Method>();
-	private Addon target;
+    private Map<String, Method> hookMethods = new ConcurrentHashMap<String, Method>();
+    private Addon target;
 
-	public Hooks(Addon target) {
-		this.target = target;
-		autoRegister();
-	}
+    public Hooks(Addon target) {
+        this.target = target;
+        autoRegister();
+    }
 
-	public void autoRegister() {
-		Method[] methods = target.getClass().getDeclaredMethods();
-		if (methods != null && methods.length > 0) {
-			for (Method m : methods) {
-				Hook hook = m.getAnnotation(Hook.class);
-				if (hook != null && StringUtils.isNotBlank(hook.value())) {
-					hookMethods.put(hook.value(), m);
-				}
-			}
-		}
+    public void autoRegister() {
+        Method[] methods = target.getClass().getDeclaredMethods();
+        if (methods != null && methods.length > 0) {
+            for (Method m : methods) {
+                Hook hook = m.getAnnotation(Hook.class);
+                if (hook != null && StringUtils.isNotBlank(hook.value())) {
+                    hookMethods.put(hook.value(), m);
+                }
+            }
+        }
 
-	}
+    }
 
-	public Object invokeHook(String hook, Object... objects) {
-		Method method = hookMethods.get(hook);
-		if (method != null) {
-			try {
-				return method.invoke(target, objects);
-			} catch (Throwable e) {
-				log.error("invokeHook error , hook name:+" + hook + " \r\n + error addon:\r\n" + target, e);
-			} finally {
-				target.hookInvokeFinished();
-			}
-		}
-		return null;
-	}
+    public Object invokeHook(String hook, Object... objects) {
+        Method method = hookMethods.get(hook);
+        if (method != null) {
+            try {
+                return method.invoke(target, objects);
+            } catch (Throwable e) {
+                log.error("invokeHook error , hook name:+" + hook + " \r\n + error addon:\r\n" + target, e);
+            } finally {
+                target.hookInvokeFinished();
+            }
+        }
+        return null;
+    }
 
 }

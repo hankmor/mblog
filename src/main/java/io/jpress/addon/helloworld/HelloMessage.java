@@ -10,18 +10,18 @@ import io.jpress.message.annotation.Listener;
 @Listener(action = MenuManager.ACTION_INIT_MENU, async = false)
 public class HelloMessage implements MessageListener {
 
-	@Override
-	public void onMessage(Message message) {
+    @Override
+    public void onMessage(Message message) {
 
-		MenuManager manager = message.getData();
+        MenuManager manager = message.getData();
 
-		MenuGroup menuGroup = new MenuGroup("hello-test", null, "插件测试");
+        MenuGroup menuGroup = new MenuGroup("hello-test", null, "插件测试");
 
-		MenuItem item = new MenuItem("test", "#", "插件测试");
-		menuGroup.addMenuItem(item);
+        MenuItem item = new MenuItem("test", "#", "插件测试");
+        menuGroup.addMenuItem(item);
 
-		manager.addMenuGroup(menuGroup);
+        manager.addMenuGroup(menuGroup);
 
-	}
+    }
 
 }

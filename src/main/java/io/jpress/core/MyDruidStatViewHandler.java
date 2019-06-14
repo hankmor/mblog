@@ -14,45 +14,45 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 
 public class MyDruidStatViewHandler extends DruidStatViewHandler {
-	
-	static String visitPath = "/admin/druid";
 
-	public MyDruidStatViewHandler() {
-		super(visitPath);
-	}
+    static String visitPath = "/admin/druid";
 
-	@Override
-	public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
-		if (target.startsWith(visitPath) && Jpress.isInstalled() && Jpress.isLoaded()) {
+    public MyDruidStatViewHandler() {
+        super(visitPath);
+    }
 
-			String encrypt_key = PropKit.get("encrypt_key");
-			String cookieInfo = getCookie(request, Consts.COOKIE_LOGINED_USER);
+    @Override
+    public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
+        if (target.startsWith(visitPath) && Jpress.isInstalled() && Jpress.isLoaded()) {
 
-			String userId = CookieUtils.getFromCookieInfo(encrypt_key, cookieInfo);
-			if (StringUtils.isNotBlank(userId)) {
-				User user = UserQuery.me().findById(new BigInteger(userId));
-				if (user != null && user.isAdministrator()) {
-					super.handle(target, request, response, isHandled);
-					return;
-				}
-			}
-		}
+            String encrypt_key = PropKit.get("encrypt_key");
+            String cookieInfo = getCookie(request, Consts.COOKIE_LOGINED_USER);
 
-		next.handle(target, request, response, isHandled);
-	}
+            String userId = CookieUtils.getFromCookieInfo(encrypt_key, cookieInfo);
+            if (StringUtils.isNotBlank(userId)) {
+                User user = UserQuery.me().findById(new BigInteger(userId));
+                if (user != null && user.isAdministrator()) {
+                    super.handle(target, request, response, isHandled);
+                    return;
+                }
+            }
+        }
 
-	private String getCookie(HttpServletRequest request, String name) {
-		Cookie cookie = getCookieObject(request, name);
-		return cookie != null ? cookie.getValue() : null;
-	}
+        next.handle(target, request, response, isHandled);
+    }
 
-	private Cookie getCookieObject(HttpServletRequest request, String name) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null)
-			for (Cookie cookie : cookies)
-				if (cookie.getName().equals(name))
-					return cookie;
-		return null;
-	}
+    private String getCookie(HttpServletRequest request, String name) {
+        Cookie cookie = getCookieObject(request, name);
+        return cookie != null ? cookie.getValue() : null;
+    }
+
+    private Cookie getCookieObject(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null)
+            for (Cookie cookie : cookies)
+                if (cookie.getName().equals(name))
+                    return cookie;
+        return null;
+    }
 
 }

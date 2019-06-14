@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,106 +29,106 @@ import java.util.List;
 @RouterMapping(url = "/install", viewPath = "/WEB-INF/install")
 @Before(InstallInterceptor.class)
 public class InstallController extends JBaseController {
-	
-	private static final Log log = Log.getLog(InstallController.class);
 
-	public void index() {
-		render("step1.html");
-	}
+    private static final Log log = Log.getLog(InstallController.class);
 
-	public void step2() {
-		String db_host = getPara("db_host");
-		String db_host_port = getPara("db_host_port");
-		db_host_port = StringUtils.isNotBlank(db_host_port) ? db_host_port.trim() : "3306";
-		String db_name = getPara("db_name");
-		String db_user = getPara("db_user");
-		String db_password = getPara("db_password");
-		String db_table_prefix = getPara("db_tablePrefix");
+    public void index() {
+        render("step1.html");
+    }
 
-		if (!StrKit.notBlank(db_host,db_host_port, db_name, db_user)) {
-			render("step2.html");
-			return;
-		}
+    public void step2() {
+        String db_host = getPara("db_host");
+        String db_host_port = getPara("db_host_port");
+        db_host_port = StringUtils.isNotBlank(db_host_port) ? db_host_port.trim() : "3306";
+        String db_name = getPara("db_name");
+        String db_user = getPara("db_user");
+        String db_password = getPara("db_password");
+        String db_table_prefix = getPara("db_tablePrefix");
 
-		InstallUtils.init(db_host,db_host_port,db_name, db_user, db_password, db_table_prefix);
+        if (!StrKit.notBlank(db_host, db_host_port, db_name, db_user)) {
+            render("step2.html");
+            return;
+        }
 
-		try {
-			List<String> tableList = InstallUtils.getTableList();
-			if (null != tableList && tableList.size() > 0) {
-				if (tableList.contains(db_table_prefix + "attachment")
-						|| tableList.contains(db_table_prefix + "comment")
-						|| tableList.contains(db_table_prefix + "content")
-						|| tableList.contains(db_table_prefix + "mapping")
-						|| tableList.contains(db_table_prefix + "metadata")
-						|| tableList.contains(db_table_prefix + "option")
-						|| tableList.contains(db_table_prefix + "taxonomy")
-						|| tableList.contains(db_table_prefix + "user")) { // table
-																			// has
-																			// contains
-					redirect("/install/step2_error");
-					return;
-				}
-			}
-		} catch (Exception e) { // db config error
-			e.printStackTrace();
-			redirect("/install/step2_error");
-			return;
-		}
+        InstallUtils.init(db_host, db_host_port, db_name, db_user, db_password, db_table_prefix);
 
-		try {
+        try {
+            List<String> tableList = InstallUtils.getTableList();
+            if (null != tableList && tableList.size() > 0) {
+                if (tableList.contains(db_table_prefix + "attachment")
+                        || tableList.contains(db_table_prefix + "comment")
+                        || tableList.contains(db_table_prefix + "content")
+                        || tableList.contains(db_table_prefix + "mapping")
+                        || tableList.contains(db_table_prefix + "metadata")
+                        || tableList.contains(db_table_prefix + "option")
+                        || tableList.contains(db_table_prefix + "taxonomy")
+                        || tableList.contains(db_table_prefix + "user")) { // table
+                    // has
+                    // contains
+                    redirect("/install/step2_error");
+                    return;
+                }
+            }
+        } catch (Exception e) { // db config error
+            e.printStackTrace();
+            redirect("/install/step2_error");
+            return;
+        }
 
-			InstallUtils.createJpressDatabase();
+        try {
 
-			List<String> tableList = InstallUtils.getTableList();
-			if (null != tableList && tableList.size() > 0) {
-				if (tableList.contains(db_table_prefix + "attachment")
-						&& tableList.contains(db_table_prefix + "comment")
-						&& tableList.contains(db_table_prefix + "content")
-						&& tableList.contains(db_table_prefix + "mapping")
-						&& tableList.contains(db_table_prefix + "metadata")
-						&& tableList.contains(db_table_prefix + "option")
-						&& tableList.contains(db_table_prefix + "taxonomy")
-						&& tableList.contains(db_table_prefix + "user")) {
-					// createJpressDatabase success
-					redirect("/install/step3");
-					return;
-				}
-			}
+            InstallUtils.createJpressDatabase();
 
-		} catch (Exception e) {
-			log.error("InstallController step2 is erro", e);
-		}
+            List<String> tableList = InstallUtils.getTableList();
+            if (null != tableList && tableList.size() > 0) {
+                if (tableList.contains(db_table_prefix + "attachment")
+                        && tableList.contains(db_table_prefix + "comment")
+                        && tableList.contains(db_table_prefix + "content")
+                        && tableList.contains(db_table_prefix + "mapping")
+                        && tableList.contains(db_table_prefix + "metadata")
+                        && tableList.contains(db_table_prefix + "option")
+                        && tableList.contains(db_table_prefix + "taxonomy")
+                        && tableList.contains(db_table_prefix + "user")) {
+                    // createJpressDatabase success
+                    redirect("/install/step3");
+                    return;
+                }
+            }
 
-		redirect("/install/step2_error");
-	}
+        } catch (Exception e) {
+            log.error("InstallController step2 is erro", e);
+        }
 
-	public void step2_error() {
+        redirect("/install/step2_error");
+    }
 
-		render("step2_error.html");
-	}
+    public void step2_error() {
 
-	public void step3() throws SQLException {
+        render("step2_error.html");
+    }
 
-		String webname = getPara("webname");
-		String username = getPara("username");
-		String password = getPara("password");
+    public void step3() throws SQLException {
 
-		if (StrKit.isBlank(webname) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
-			keepPara();
-			render("step3.html");
-			return;
-		}
+        String webname = getPara("webname");
+        String username = getPara("username");
+        String password = getPara("password");
 
-		InstallUtils.setWebName(webname);
+        if (StrKit.isBlank(webname) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
+            keepPara();
+            render("step3.html");
+            return;
+        }
 
-		String salt = EncryptUtils.salt();
-		password = EncryptUtils.encryptPassword(password, salt);
-		InstallUtils.setWebFirstUser(username, password, salt);
+        InstallUtils.setWebName(webname);
 
-		InstallUtils.createDbProperties();
-		InstallUtils.createJpressProperties();
+        String salt = EncryptUtils.salt();
+        password = EncryptUtils.encryptPassword(password, salt);
+        InstallUtils.setWebFirstUser(username, password, salt);
 
-		redirect("/");
-	}
+        InstallUtils.createDbProperties();
+        InstallUtils.createJpressProperties();
+
+        redirect("/");
+    }
 
 }

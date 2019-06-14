@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,45 +28,45 @@ import java.math.BigInteger;
 @RouterMapping(url = "/counter")
 public class VisitorCounter extends JBaseController {
 
-	private static final String CACHE_NAME = "visitor_counter";
-	private static final String CID = "cid_";
+    private static final String CACHE_NAME = "visitor_counter";
+    private static final String CID = "cid_";
 
-	public void index() {
-		BigInteger id = getParaToBigInteger("cid");
-		if (id == null) {
-			renderJavascript("");
-			return;
-		}
+    public void index() {
+        BigInteger id = getParaToBigInteger("cid");
+        if (id == null) {
+            renderJavascript("");
+            return;
+        }
 
-		Long visitorCount = CacheKit.get(CACHE_NAME, buildKey(id));
-		visitorCount = visitorCount == null ? 0 : visitorCount;
-		CacheKit.put(CACHE_NAME, buildKey(id), visitorCount + 1);
-		renderJavascript("");
-	}
+        Long visitorCount = CacheKit.get(CACHE_NAME, buildKey(id));
+        visitorCount = visitorCount == null ? 0 : visitorCount;
+        CacheKit.put(CACHE_NAME, buildKey(id), visitorCount + 1);
+        renderJavascript("");
+    }
 
-	public void show() {
-		BigInteger id = getParaToBigInteger("cid");
-		if (id == null) {
-			renderNull();
-			return;
-		}
+    public void show() {
+        BigInteger id = getParaToBigInteger("cid");
+        if (id == null) {
+            renderNull();
+            return;
+        }
 
-		Long visitorCount = CacheKit.get(CACHE_NAME, buildKey(id));
-		visitorCount = visitorCount == null ? 0 : visitorCount;
-		renderText(visitorCount + "");
-	}
+        Long visitorCount = CacheKit.get(CACHE_NAME, buildKey(id));
+        visitorCount = visitorCount == null ? 0 : visitorCount;
+        renderText(visitorCount + "");
+    }
 
-	public static long getVisitorCount(BigInteger id) {
-		Long visitorCount = CacheKit.get(CACHE_NAME, buildKey(id));
-		return visitorCount == null ? 0 : visitorCount;
-	}
+    public static long getVisitorCount(BigInteger id) {
+        Long visitorCount = CacheKit.get(CACHE_NAME, buildKey(id));
+        return visitorCount == null ? 0 : visitorCount;
+    }
 
-	public static void clearVisitorCount(BigInteger id) {
-		CacheKit.remove(CACHE_NAME, buildKey(id));
-	}
+    public static void clearVisitorCount(BigInteger id) {
+        CacheKit.remove(CACHE_NAME, buildKey(id));
+    }
 
-	private static String buildKey(BigInteger id) {
-		return CID + id;
-	}
+    private static String buildKey(BigInteger id) {
+        return CID + id;
+    }
 
 }

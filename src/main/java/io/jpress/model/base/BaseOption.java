@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,129 +31,143 @@ import java.math.BigInteger;
 @SuppressWarnings("serial")
 public abstract class BaseOption<M extends BaseOption<M>> extends JModel<M> implements IBean {
 
-	public static final String CACHE_NAME = "option";
-	public static final String METADATA_TYPE = "option";
+    public static final String CACHE_NAME = "option";
+    public static final String METADATA_TYPE = "option";
 
-	public static final String ACTION_ADD = "option:add";
-	public static final String ACTION_DELETE = "option:delete";
-	public static final String ACTION_UPDATE = "option:update";
+    public static final String ACTION_ADD = "option:add";
+    public static final String ACTION_DELETE = "option:delete";
+    public static final String ACTION_UPDATE = "option:update";
 
-	public void removeCache(Object key){
-		if(key == null) return;
-		CacheKit.remove(CACHE_NAME, key);
-	}
+    public void removeCache(Object key) {
+        if (key == null) return;
+        CacheKit.remove(CACHE_NAME, key);
+    }
 
-	public void putCache(Object key,Object value){
-		CacheKit.put(CACHE_NAME, key, value);
-	}
+    public void putCache(Object key, Object value) {
+        CacheKit.put(CACHE_NAME, key, value);
+    }
 
-	public M getCache(Object key){
-		return CacheKit.get(CACHE_NAME, key);
-	}
+    public M getCache(Object key) {
+        return CacheKit.get(CACHE_NAME, key);
+    }
 
-	public M getCache(Object key,IDataLoader dataloader){
-		return CacheKit.get(CACHE_NAME, key, dataloader);
-	}
+    public M getCache(Object key, IDataLoader dataloader) {
+        return CacheKit.get(CACHE_NAME, key, dataloader);
+    }
 
-	public Metadata createMetadata(){
-		Metadata md = new Metadata();
-		md.setObjectId(getId());
-		md.setObjectType(METADATA_TYPE);
-		return md;
-	}
+    public Metadata createMetadata() {
+        Metadata md = new Metadata();
+        md.setObjectId(getId());
+        md.setObjectType(METADATA_TYPE);
+        return md;
+    }
 
-	public Metadata createMetadata(String key,String value){
-		Metadata md = new Metadata();
-		md.setObjectId(getId());
-		md.setObjectType(METADATA_TYPE);
-		md.setMetaKey(key);
-		md.setMetaValue(value);
-		return md;
-	}
+    public Metadata createMetadata(String key, String value) {
+        Metadata md = new Metadata();
+        md.setObjectId(getId());
+        md.setObjectType(METADATA_TYPE);
+        md.setMetaKey(key);
+        md.setMetaValue(value);
+        return md;
+    }
 
-	public boolean saveOrUpdateMetadta(String key,String value){
-		Metadata metadata = MetaDataQuery.me().findByTypeAndIdAndKey(METADATA_TYPE, getId(), key);
-		if (metadata == null) {
-			metadata = createMetadata(key, value);
-			return metadata.save();
-		}
-		metadata.setMetaValue(value);
-		return metadata.update();
-	}
+    public boolean saveOrUpdateMetadta(String key, String value) {
+        Metadata metadata = MetaDataQuery.me().findByTypeAndIdAndKey(METADATA_TYPE, getId(), key);
+        if (metadata == null) {
+            metadata = createMetadata(key, value);
+            return metadata.save();
+        }
+        metadata.setMetaValue(value);
+        return metadata.update();
+    }
 
-	public String metadata(String key) {
-		Metadata m = MetaDataQuery.me().findByTypeAndIdAndKey(METADATA_TYPE, getId(), key);
-		if (m != null) {
-			return m.getMetaValue();
-		}
-		return null;
-	}
+    public String metadata(String key) {
+        Metadata m = MetaDataQuery.me().findByTypeAndIdAndKey(METADATA_TYPE, getId(), key);
+        if (m != null) {
+            return m.getMetaValue();
+        }
+        return null;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if(o == null){ return false; }
-		if(!(o instanceof BaseOption<?>)){return false;}
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof BaseOption<?>)) {
+            return false;
+        }
 
-		BaseOption<?> m = (BaseOption<?>) o;
-		if(m.getId() == null){return false;}
+        BaseOption<?> m = (BaseOption<?>) o;
+        if (m.getId() == null) {
+            return false;
+        }
 
-		return m.getId().compareTo(this.getId()) == 0;
-	}
+        return m.getId().compareTo(this.getId()) == 0;
+    }
 
-	@Override
-	public boolean save() {
-		boolean saved = super.save();
-		if (saved) { MessageKit.sendMessage(ACTION_ADD, this); }
-		return saved;
-	}
+    @Override
+    public boolean save() {
+        boolean saved = super.save();
+        if (saved) {
+            MessageKit.sendMessage(ACTION_ADD, this);
+        }
+        return saved;
+    }
 
-	@Override
-	public boolean delete() {
-		boolean deleted = super.delete();
-		if (deleted) { MessageKit.sendMessage(ACTION_DELETE, this); }
-		return deleted;
-	}
+    @Override
+    public boolean delete() {
+        boolean deleted = super.delete();
+        if (deleted) {
+            MessageKit.sendMessage(ACTION_DELETE, this);
+        }
+        return deleted;
+    }
 
-	@Override
-	public boolean deleteById(Object idValue) {
-		boolean deleted = super.deleteById(idValue);
-		if (deleted) { MessageKit.sendMessage(ACTION_DELETE, this); }
-		return deleted;
-	}
+    @Override
+    public boolean deleteById(Object idValue) {
+        boolean deleted = super.deleteById(idValue);
+        if (deleted) {
+            MessageKit.sendMessage(ACTION_DELETE, this);
+        }
+        return deleted;
+    }
 
-	@Override
-	public boolean update() {
-		boolean update = super.update();
-		if (update) { MessageKit.sendMessage(ACTION_UPDATE, this); }
-		return update;
-	}
+    @Override
+    public boolean update() {
+        boolean update = super.update();
+        if (update) {
+            MessageKit.sendMessage(ACTION_UPDATE, this);
+        }
+        return update;
+    }
 
-	public void setId(BigInteger id) {
-		set("id", id);
-	}
+    public void setId(BigInteger id) {
+        set("id", id);
+    }
 
-	public BigInteger getId() {
-		Object id = get("id");
-		if (id == null)
-			return null;
+    public BigInteger getId() {
+        Object id = get("id");
+        if (id == null)
+            return null;
 
-		return id instanceof BigInteger ? (BigInteger)id : new BigInteger(id.toString());
-	}
+        return id instanceof BigInteger ? (BigInteger) id : new BigInteger(id.toString());
+    }
 
-	public void setOptionKey(String optionKey) {
-		set("option_key", optionKey);
-	}
+    public void setOptionKey(String optionKey) {
+        set("option_key", optionKey);
+    }
 
-	public String getOptionKey() {
-		return get("option_key");
-	}
+    public String getOptionKey() {
+        return get("option_key");
+    }
 
-	public void setOptionValue(String optionValue) {
-		set("option_value", optionValue);
-	}
+    public void setOptionValue(String optionValue) {
+        set("option_value", optionValue);
+    }
 
-	public String getOptionValue() {
-		return get("option_value");
-	}
+    public String getOptionValue() {
+        return get("option_value");
+    }
 
 }

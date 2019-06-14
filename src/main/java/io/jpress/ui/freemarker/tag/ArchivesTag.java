@@ -10,48 +10,48 @@ import io.jpress.utils.StringUtils;
 import java.util.List;
 
 public class ArchivesTag extends JTag {
-	
-	public static final String TAG_NAME = "jp.archives";
 
-	@Override
-	public void onRender() {
+    public static final String TAG_NAME = "jp.archives";
 
-		String module = getParam("module", Consts.MODULE_ARTICLE);
-		if (StringUtils.isBlank(module)) {
-			renderText("");
-			return;
-		}
-		// 语言
-		String lang = getParam("lang", "en");
-		boolean includeContents = Boolean.valueOf(getParam("includeContents", "true"));
+    @Override
+    public void onRender() {
 
-		List<Archive> list = ContentQuery.me().findArchives(module, lang);
-		if (list == null || list.isEmpty()) {
-			renderText("");
-			return;
-		}
+        String module = getParam("module", Consts.MODULE_ARTICLE);
+        if (StringUtils.isBlank(module)) {
+            renderText("");
+            return;
+        }
+        // 语言
+        String lang = getParam("lang", "en");
+        boolean includeContents = Boolean.valueOf(getParam("includeContents", "true"));
 
-		if (includeContents) {
-			List<Content> contents = ContentQuery.me().findArchiveByModule(module);
-			if (contents == null || contents.isEmpty()) {
-				renderText("");
-				return;
-			}
+        List<Archive> list = ContentQuery.me().findArchives(module, lang);
+        if (list == null || list.isEmpty()) {
+            renderText("");
+            return;
+        }
 
-			for (Content c : contents) {
-				String archiveDate = c.getStr("archiveDate");
-				if (archiveDate == null)
-					continue;
-				for (Archive a : list) {
-					if (archiveDate.equals(a.getDate())) {
-						a.addData(c);
-					}
-				}
-			}
-		}
+        if (includeContents) {
+            List<Content> contents = ContentQuery.me().findArchiveByModule(module);
+            if (contents == null || contents.isEmpty()) {
+                renderText("");
+                return;
+            }
 
-		setVariable("archives", list);
-		renderBody();
-	}
+            for (Content c : contents) {
+                String archiveDate = c.getStr("archiveDate");
+                if (archiveDate == null)
+                    continue;
+                for (Archive a : list) {
+                    if (archiveDate.equals(a.getDate())) {
+                        a.addData(c);
+                    }
+                }
+            }
+        }
+
+        setVariable("archives", list);
+        renderBody();
+    }
 
 }

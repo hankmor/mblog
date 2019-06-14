@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,109 +31,109 @@ import java.util.List;
 
 @RouterMapping(url = "/rss")
 public class RssController extends Controller {
-	private static final String contentType = "text/xml; charset=" + Consts.CHARTSET_UTF8;
+    private static final String contentType = "text/xml; charset=" + Consts.CHARTSET_UTF8;
 
-	private String title;
-	private String description;
-	private String link;
+    private String title;
+    private String description;
+    private String link;
 
-	private String webTitle;
-	private String webLink;
-	private String webLogo;
+    private String webTitle;
+    private String webLink;
+    private String webLogo;
 
-	private BigInteger taxonomyId;
+    private BigInteger taxonomyId;
 
-	@ActionCache
-	public void index() {
-		doInit();
-		doRender();
-	}
+    @ActionCache
+    public void index() {
+        doInit();
+        doRender();
+    }
 
-	private void doInit() {
-		String para = getPara();
-		if (StringUtils.isNotBlank(para)) {
-			taxonomyId = new BigInteger(para);
-		}
+    private void doInit() {
+        String para = getPara();
+        if (StringUtils.isNotBlank(para)) {
+            taxonomyId = new BigInteger(para);
+        }
 
-		webTitle = OptionQuery.me().findValue("web_title");
-		if (StringUtils.isBlank(webTitle)) {
-			webTitle = OptionQuery.me().findValue("web_name");
-		}
-		webLink = OptionQuery.me().findValue("web_domain");
-		webLogo = OptionQuery.me().findValue("web_logo");
-		
-		if (webLogo == null)
-			webLogo = "";
+        webTitle = OptionQuery.me().findValue("web_title");
+        if (StringUtils.isBlank(webTitle)) {
+            webTitle = OptionQuery.me().findValue("web_name");
+        }
+        webLink = OptionQuery.me().findValue("web_domain");
+        webLogo = OptionQuery.me().findValue("web_logo");
 
-		if (taxonomyId == null) {
-			title = webTitle;
-			link = webLink;
-			description = OptionQuery.me().findValue("web_subtitle");
-		} else {
-			Taxonomy taxonomy = TaxonomyQuery.me().findById(taxonomyId);
-			if (taxonomy != null) {
-				title = taxonomy.getTitle();
-				description = taxonomy.getText();
-				link = webLink + taxonomy.getUrl();
-			}
-		}
+        if (webLogo == null)
+            webLogo = "";
 
-	}
+        if (taxonomyId == null) {
+            title = webTitle;
+            link = webLink;
+            description = OptionQuery.me().findValue("web_subtitle");
+        } else {
+            Taxonomy taxonomy = TaxonomyQuery.me().findById(taxonomyId);
+            if (taxonomy != null) {
+                title = taxonomy.getTitle();
+                description = taxonomy.getText();
+                link = webLink + taxonomy.getUrl();
+            }
+        }
 
-	private void doRender() {
-		StringBuilder xmlBuilder = new StringBuilder();
-		buildChannelHeader(xmlBuilder);
-		buildChannelInfo(xmlBuilder);
+    }
 
-		List<Content> clist = null;
-		if (taxonomyId != null) {
-			clist = ContentQuery.me().findListInNormal(1, 20, taxonomyId);
-		} else {
-			clist = ContentQuery.me().findListInNormal(1, 20);
-		}
+    private void doRender() {
+        StringBuilder xmlBuilder = new StringBuilder();
+        buildChannelHeader(xmlBuilder);
+        buildChannelInfo(xmlBuilder);
 
-		if (clist != null && !clist.isEmpty()) {
-			for (Content content : clist) {
-				buildChannelItem(xmlBuilder, content);
-			}
-		}
+        List<Content> clist = null;
+        if (taxonomyId != null) {
+            clist = ContentQuery.me().findListInNormal(1, 20, taxonomyId);
+        } else {
+            clist = ContentQuery.me().findListInNormal(1, 20);
+        }
 
-		buildChannelFooter(xmlBuilder);
-		renderText(xmlBuilder.toString(), contentType);
-	}
+        if (clist != null && !clist.isEmpty()) {
+            for (Content content : clist) {
+                buildChannelItem(xmlBuilder, content);
+            }
+        }
 
-	private void buildChannelHeader(StringBuilder xmlBuilder) {
-		xmlBuilder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		xmlBuilder.append("<rss version=\"2.0\">");
-		xmlBuilder.append("<channel>");
-	}
+        buildChannelFooter(xmlBuilder);
+        renderText(xmlBuilder.toString(), contentType);
+    }
 
-	private void buildChannelFooter(StringBuilder xmlBuilder) {
-		xmlBuilder.append("</channel>");
-		xmlBuilder.append("</rss>");
-		xmlBuilder.append("<!-- This rss was generated by JPress --> ");
-	}
+    private void buildChannelHeader(StringBuilder xmlBuilder) {
+        xmlBuilder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        xmlBuilder.append("<rss version=\"2.0\">");
+        xmlBuilder.append("<channel>");
+    }
 
-	private void buildChannelInfo(StringBuilder xmlBuilder) {
-		xmlBuilder.append("<title>" + title + "</title>");
-		xmlBuilder.append("<description>" + description + "</description>");
-		xmlBuilder.append("<link>" + link + "</link>");
-		xmlBuilder.append("<generator>JPress (http://www.jpress.io) </generator>");
-		xmlBuilder.append("<image>");
-		xmlBuilder.append("<url>" + webLogo + "</url>");
-		xmlBuilder.append("<title>" + webTitle + "</title>");
-		xmlBuilder.append("<link>" + webLink + "</link>");
-		xmlBuilder.append("</image>");
-	}
+    private void buildChannelFooter(StringBuilder xmlBuilder) {
+        xmlBuilder.append("</channel>");
+        xmlBuilder.append("</rss>");
+        xmlBuilder.append("<!-- This rss was generated by JPress --> ");
+    }
 
-	private void buildChannelItem(StringBuilder xmlBuilder, Content content) {
-		xmlBuilder.append("<item>");
-		xmlBuilder.append("<title><![CDATA[ " + content.getTitle() + " ]]></title>");
-		xmlBuilder.append("<link>" + webLink + content.getUrl() + "</link>");
-		xmlBuilder.append("<description><![CDATA[ " + content.getText() + " ]]></description>");
-		xmlBuilder.append("<source>" + webTitle + "</source>");
-		xmlBuilder.append("<pubDate>" + content.getModified() + "</pubDate>");
-		xmlBuilder.append("</item>");
-	}
+    private void buildChannelInfo(StringBuilder xmlBuilder) {
+        xmlBuilder.append("<title>" + title + "</title>");
+        xmlBuilder.append("<description>" + description + "</description>");
+        xmlBuilder.append("<link>" + link + "</link>");
+        xmlBuilder.append("<generator>JPress (http://www.jpress.io) </generator>");
+        xmlBuilder.append("<image>");
+        xmlBuilder.append("<url>" + webLogo + "</url>");
+        xmlBuilder.append("<title>" + webTitle + "</title>");
+        xmlBuilder.append("<link>" + webLink + "</link>");
+        xmlBuilder.append("</image>");
+    }
+
+    private void buildChannelItem(StringBuilder xmlBuilder, Content content) {
+        xmlBuilder.append("<item>");
+        xmlBuilder.append("<title><![CDATA[ " + content.getTitle() + " ]]></title>");
+        xmlBuilder.append("<link>" + webLink + content.getUrl() + "</link>");
+        xmlBuilder.append("<description><![CDATA[ " + content.getText() + " ]]></description>");
+        xmlBuilder.append("<source>" + webTitle + "</source>");
+        xmlBuilder.append("<pubDate>" + content.getModified() + "</pubDate>");
+        xmlBuilder.append("</item>");
+    }
 
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,217 +33,217 @@ import java.util.Set;
 @Table(tableName = "taxonomy", primaryKey = "id")
 public class Taxonomy extends BaseTaxonomy<Taxonomy> implements ISortModel<Taxonomy> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final String TYPE_TAG = "tag"; // tag
-	public static final String TYPE_SPECIAL = "special"; // 专题
-	public static final String TYPE_CATEGORY = "category"; // 分类
+    public static final String TYPE_TAG = "tag"; // tag
+    public static final String TYPE_SPECIAL = "special"; // 专题
+    public static final String TYPE_CATEGORY = "category"; // 分类
 
-	private int layer = 0;
-	private List<Taxonomy> childList;
-	private List<Taxonomy> filterList;
-	private Taxonomy parent;
-	private String activeClass;
+    private int layer = 0;
+    private List<Taxonomy> childList;
+    private List<Taxonomy> filterList;
+    private Taxonomy parent;
+    private String activeClass;
 
-	public <T> T getFromListCache(Object key, IDataLoader dataloader) {
-		Set<String> inCacheKeys = CacheKit.get(CACHE_NAME, "cachekeys");
+    public <T> T getFromListCache(Object key, IDataLoader dataloader) {
+        Set<String> inCacheKeys = CacheKit.get(CACHE_NAME, "cachekeys");
 
-		Set<String> cacheKeyList = new HashSet<String>();
-		if (inCacheKeys != null) {
-			cacheKeyList.addAll(inCacheKeys);
-		}
+        Set<String> cacheKeyList = new HashSet<String>();
+        if (inCacheKeys != null) {
+            cacheKeyList.addAll(inCacheKeys);
+        }
 
-		cacheKeyList.add(key.toString());
-		CacheKit.put(CACHE_NAME, "cachekeys", cacheKeyList);
+        cacheKeyList.add(key.toString());
+        CacheKit.put(CACHE_NAME, "cachekeys", cacheKeyList);
 
-		return CacheKit.get("taxonomy_list", key, dataloader);
-	}
+        return CacheKit.get("taxonomy_list", key, dataloader);
+    }
 
-	public void clearList() {
-		Set<String> list = CacheKit.get(CACHE_NAME, "cachekeys");
-		if (list != null && list.size() > 0) {
-			for (String key : list) {
-				if (!key.startsWith("module:")) {
-					CacheKit.remove("taxonomy_list", key);
-					continue;
-				}
+    public void clearList() {
+        Set<String> list = CacheKit.get(CACHE_NAME, "cachekeys");
+        if (list != null && list.size() > 0) {
+            for (String key : list) {
+                if (!key.startsWith("module:")) {
+                    CacheKit.remove("taxonomy_list", key);
+                    continue;
+                }
 
-				// 不清除其他模型的内容
-				if (key.startsWith("module:" + getContentModule())) {
-					CacheKit.remove("taxonomy_list", key);
-				}
-			}
-		}
-	}
+                // 不清除其他模型的内容
+                if (key.startsWith("module:" + getContentModule())) {
+                    CacheKit.remove("taxonomy_list", key);
+                }
+            }
+        }
+    }
 
-	public int getLayer() {
-		return layer;
-	}
+    public int getLayer() {
+        return layer;
+    }
 
-	@Override
-	public void setLayer(int tier) {
-		this.layer = tier;
-	}
+    @Override
+    public void setLayer(int tier) {
+        this.layer = tier;
+    }
 
-	public String getLayerString() {
-		String layerString = "";
-		for (int i = 0; i < layer; i++) {
-			layerString += "— ";
-		}
-		return layerString;
-	}
+    public String getLayerString() {
+        String layerString = "";
+        for (int i = 0; i < layer; i++) {
+            layerString += "— ";
+        }
+        return layerString;
+    }
 
-	public List<Taxonomy> getChildList() {
-		return childList;
-	}
+    public List<Taxonomy> getChildList() {
+        return childList;
+    }
 
-	public void setChildList(List<Taxonomy> childList) {
-		this.childList = childList;
-	}
+    public void setChildList(List<Taxonomy> childList) {
+        this.childList = childList;
+    }
 
-	@Override
-	public void addChild(Taxonomy child) {
-		if (null == childList) {
-			childList = new ArrayList<Taxonomy>();
-		}
-		
-		//如果是从ehcache内存取到的数据，可能该model已经添加过了
-		if(!childList.contains(child)){
-			childList.add(child);
-		}
-	}
+    @Override
+    public void addChild(Taxonomy child) {
+        if (null == childList) {
+            childList = new ArrayList<Taxonomy>();
+        }
 
-	public List<Taxonomy> getFilterList() {
-		return filterList;
-	}
+        //如果是从ehcache内存取到的数据，可能该model已经添加过了
+        if (!childList.contains(child)) {
+            childList.add(child);
+        }
+    }
 
-	public void initFilterList(List<Taxonomy> list, String activeClass) {
-		this.filterList = new ArrayList<Taxonomy>();
-		this.filterList.addAll(list);
+    public List<Taxonomy> getFilterList() {
+        return filterList;
+    }
 
-		this.activeClass = activeClass;
-	}
+    public void initFilterList(List<Taxonomy> list, String activeClass) {
+        this.filterList = new ArrayList<Taxonomy>();
+        this.filterList.addAll(list);
 
-	@Override
-	public Taxonomy getParent() {
-		return parent;
-	}
+        this.activeClass = activeClass;
+    }
 
-	@Override
-	public void setParent(Taxonomy parent) {
-		this.parent = parent;
-	}
+    @Override
+    public Taxonomy getParent() {
+        return parent;
+    }
 
-	public void updateContentCount() {
-		long count = MappingQuery.me().findCountByTaxonomyId(getId(), Content.STATUS_NORMAL);
-		if (count > 0) {
-			setContentCount(count);
-			this.update();
-		}
-	}
+    @Override
+    public void setParent(Taxonomy parent) {
+        this.parent = parent;
+    }
 
-	public long findContentCount() {
-		Long count = MappingQuery.me().findCountByTaxonomyId(getId());
-		return count == null ? 0 : count;
-	}
+    public void updateContentCount() {
+        long count = MappingQuery.me().findCountByTaxonomyId(getId(), Content.STATUS_NORMAL);
+        if (count > 0) {
+            setContentCount(count);
+            this.update();
+        }
+    }
 
-	public String getUrl() {
-		return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(this);
-	}
+    public long findContentCount() {
+        Long count = MappingQuery.me().findCountByTaxonomyId(getId());
+        return count == null ? 0 : count;
+    }
 
-	public String getFilterUrl() {
-		if (filterList == null || filterList.isEmpty()) {
-			return getUrl();
-		}
+    public String getUrl() {
+        return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(this);
+    }
 
-		List<Taxonomy> list = new ArrayList<Taxonomy>();
-		for (Taxonomy taxonomy : filterList) {
-			if (!taxonomy.getType().equals(getType())) {
-				list.add(taxonomy);
-			}
-		}
-		list.add(this);
-		return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(list);
-	}
+    public String getFilterUrl() {
+        if (filterList == null || filterList.isEmpty()) {
+            return getUrl();
+        }
 
-	public boolean isActive() {
-		return filterList != null && filterList.contains(this);
-	}
+        List<Taxonomy> list = new ArrayList<Taxonomy>();
+        for (Taxonomy taxonomy : filterList) {
+            if (!taxonomy.getType().equals(getType())) {
+                list.add(taxonomy);
+            }
+        }
+        list.add(this);
+        return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(list);
+    }
 
-	public String getActiveClass() {
-		if (!isActive())
-			return null;
-		return activeClass;
-	}
+    public boolean isActive() {
+        return filterList != null && filterList.contains(this);
+    }
 
-	public void setActiveClass(String activeClass) {
-		this.activeClass = activeClass;
-	}
+    public String getActiveClass() {
+        if (!isActive())
+            return null;
+        return activeClass;
+    }
 
-	public String getSelectUrl() {
-		if (filterList == null || filterList.isEmpty()) {
-			return getUrl();
-		}
+    public void setActiveClass(String activeClass) {
+        this.activeClass = activeClass;
+    }
 
-		List<Taxonomy> list = new ArrayList<Taxonomy>();
-		list.addAll(filterList);
-		if (!list.contains(this)) {
-			list.add(this);
-		} else {
-			list.remove(this);
-		}
+    public String getSelectUrl() {
+        if (filterList == null || filterList.isEmpty()) {
+            return getUrl();
+        }
 
-		if (list.isEmpty()) {
-			return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(getContentModule());
-		}
+        List<Taxonomy> list = new ArrayList<Taxonomy>();
+        list.addAll(filterList);
+        if (!list.contains(this)) {
+            list.add(this);
+        } else {
+            list.remove(this);
+        }
 
-		return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(list);
-	}
+        if (list.isEmpty()) {
+            return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(getContentModule());
+        }
 
-	@Override
-	public boolean save() {
-		if (getId() != null) {
-			removeCache(getId());
-			putCache(getId(), this);
-		}
+        return JFinal.me().getContextPath() + TaxonomyRouter.getRouter(list);
+    }
 
-		clearList();
+    @Override
+    public boolean save() {
+        if (getId() != null) {
+            removeCache(getId());
+            putCache(getId(), this);
+        }
 
-		return super.save();
-	}
+        clearList();
 
-	public boolean update() {
-		if (getId() != null) {
-			removeCache(getId());
-			removeCache(this.getContentModule() + ":" + this.getSlug());
-		}
+        return super.save();
+    }
 
-		clearList();
+    public boolean update() {
+        if (getId() != null) {
+            removeCache(getId());
+            removeCache(this.getContentModule() + ":" + this.getSlug());
+        }
 
-		return super.update();
-	}
+        clearList();
 
-	@Override
-	public boolean delete() {
-		removeCache(getId());
-		removeCache(this.getContentModule() + ":" + this.getSlug());
+        return super.update();
+    }
 
-		clearList();
+    @Override
+    public boolean delete() {
+        removeCache(getId());
+        removeCache(this.getContentModule() + ":" + this.getSlug());
 
-		return super.delete();
-	}
+        clearList();
 
-	@Override
-	public void setSlug(String slug) {
-		if (StringUtils.isNotBlank(slug)) {
-			slug = slug.trim();
-			if (StringUtils.isNumeric(slug)) {
-				slug = "t" + slug; // slug不能为全是数字,随便添加一个字母，t代表taxonomy好了
-			} else {
-				slug = slug.replaceAll("\\pP|\\pS|(\\s+)|[\\$,。\\.…，_？\\-?、；;:!]", "");
-			}
-		}
-		super.setSlug(slug);
-	}
+        return super.delete();
+    }
+
+    @Override
+    public void setSlug(String slug) {
+        if (StringUtils.isNotBlank(slug)) {
+            slug = slug.trim();
+            if (StringUtils.isNumeric(slug)) {
+                slug = "t" + slug; // slug不能为全是数字,随便添加一个字母，t代表taxonomy好了
+            } else {
+                slug = slug.replaceAll("\\pP|\\pS|(\\s+)|[\\$,。\\.…，_？\\-?、；;:!]", "");
+            }
+        }
+        super.setSlug(slug);
+    }
 
 }

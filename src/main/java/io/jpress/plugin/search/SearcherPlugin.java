@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015-2016, Michael Yang 杨福海 (fuhai999@gmail.com).
- *
+ * <p>
  * Licensed under the GNU Lesser General Public License (LGPL) ,Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * <p>
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,41 +23,41 @@ import java.util.List;
 
 public class SearcherPlugin implements IPlugin {
 
-	static final Log log = Log.getLog(SearcherPlugin.class);
+    static final Log log = Log.getLog(SearcherPlugin.class);
 
-	private static ISearcher mSearcher;
+    private static ISearcher mSearcher;
 
-	public static void initSearcher(Class<? extends ISearcher> clazz) {
-		try {
-			mSearcher = (ISearcher) clazz.newInstance();
-			mSearcher.init();
-			SearcherKit.init(mSearcher);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public static void initSearcher(Class<? extends ISearcher> clazz) {
+        try {
+            mSearcher = (ISearcher) clazz.newInstance();
+            mSearcher.init();
+            SearcherKit.init(mSearcher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public boolean start() {
-		List<Class<ISearcher>> list = ClassUtils.scanSubClass(ISearcher.class, true);
+    @Override
+    public boolean start() {
+        List<Class<ISearcher>> list = ClassUtils.scanSubClass(ISearcher.class, true);
 
-		if (list == null || list.isEmpty()) {
-			log.error("cant scan ISearcher implement class in class path.");
-			return true;
-		}
+        if (list == null || list.isEmpty()) {
+            log.error("cant scan ISearcher implement class in class path.");
+            return true;
+        }
 
-		if (list.size() > 1) {
-			log.warn("there are too many searcher");
-		}
+        if (list.size() > 1) {
+            log.warn("there are too many searcher");
+        }
 
-		initSearcher(list.get(0));
+        initSearcher(list.get(0));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean stop() {
-		return true;
-	}
+    @Override
+    public boolean stop() {
+        return true;
+    }
 
 }

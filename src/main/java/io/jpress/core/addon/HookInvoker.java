@@ -20,7 +20,6 @@ import com.jfinal.core.Controller;
 import com.jfinal.render.Render;
 import io.jpress.menu.MenuManager;
 
-import javax.naming.ldap.Control;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
