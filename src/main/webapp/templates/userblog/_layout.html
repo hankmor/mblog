@@ -45,10 +45,20 @@
         <li class="x-padding-left-rem1 x-padding-right-rem1 display"><a href="${CPATH!}/about">联系我们</a></li>
       </ul>
       <ul class="jblog-link-content-right">
-          <li class="display"><a href="#"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
-          <li class="x-part-border-left"><a href="#"><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
+          <li class="display">
+              <a href="javascript:;" id="qq_show" class="myqq">
+                  <i class="fa fa-qq" aria-hidden="true"></i>
+                  <img src="${CTPATH}/assets/images/qqqr.jpg" style="display: none;width: 200px;position: absolute;z-index: 9999;border:1px solid #ddd;" width="200px">
+              </a>
+          </li>
+          <li class="x-part-border-left">
+              <a href="javascript:;" id="weixin_show">
+                  <i class="fa fa-weixin" aria-hidden="true"></i>
+                  <img src="${CTPATH}/assets/images/weixinqr.jpg" style="display: none;width: 200px;position: absolute;z-index: 9999;border:1px solid #ddd;" width="200px">
+              </a>
+          </li>
           <li><a href="https://weibo.com/superbugs" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
-          <li><a href="https://github.com/sunfuchang" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a></li>
+          <li><a href="https://github.com/belonk" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a></li>
       </ul>
     </div>
   </div>
@@ -105,21 +115,51 @@ ${OPTION('jpblog_statistical_code')!}
 <script type="text/javascript">
 <@script />
 $(document).ready(function() {
-//    var w = $('#tagCanvasContainer').width();
-//    $('#tagCanvas').attr("width", w);
-//    $('#tagCanvas').attr("height", w);
-//    if (!$('#tagCanvas').tagcanvas({
-//            textColour: '#19b5fe',
-//            outlineColour: '#0df',
-//            reverse: true,
-//            depth: 0.8,
-//            textFont: "Microsoft YaHei, Open Sans",
-//            weight: false,
-//            maxSpeed: 0.05
-//        }, 'tags')
-//    ) {
-//        $('#tagCanvasContainer').hide();
-//    }
+   // 显示QQ、weixin二维码
+   $('#qq_show,#weixin_show').mouseover(function() {
+       var $this = $(this);
+       var img = $this.find('img');
+       img.css('top', $this.offset().top + 30);
+       img.css('left', $this.offset().left - 165);
+       img.show();
+   }).mouseout(function() {
+       var $this = $(this);
+       var img = $this.find('img');
+       img.hide();
+   });
+   // 显示赞赏图片
+    $('#zan_btn').click(function() {
+        var $this = $(this);
+        var img = $this.find('img');
+        if (img.is(":hidden")) {
+            img.css('top', $this.offset().top + 40);
+            img.css('left', $this.offset().left - 195);
+            img.show();
+        } else {
+            img.hide();
+        }
+    })
+    $('##zan_btn img').click(function() {
+        var $this = $(this);
+        $this.hide();
+    });
+
+   // 3D旋转标签
+   // var w = $('#tagCanvasContainer').width();
+   // $('#tagCanvas').attr("width", w);
+   // $('#tagCanvas').attr("height", w);
+   // if (!$('#tagCanvas').tagcanvas({
+   //         textColour: '#19b5fe',
+   //         outlineColour: '#0df',
+   //         reverse: true,
+   //         depth: 0.8,
+   //         textFont: "Microsoft YaHei, Open Sans",
+   //         weight: false,
+   //         maxSpeed: 0.05
+   //     }, 'tags')
+   // ) {
+   //     $('#tagCanvasContainer').hide();
+   // }
 
     var wordArray = $('#tags a').map(function () {
         var a = $(this);
