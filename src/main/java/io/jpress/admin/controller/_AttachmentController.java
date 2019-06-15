@@ -54,6 +54,19 @@ public class _AttachmentController extends JBaseCRUDController<Attachment> {
         Page<Attachment> page = AttachmentQuery.me().paginate(getPageNumber(), getPageSize(), null, null, null, null,
                 getPara("k", "").trim(), getPara("dm"), getPara("mime"), null);
 
+        for (Attachment attachment : page.getList()) {
+            if (attachment.isImage()) {
+                String webRoot = PathKit.getWebRootPath();
+                String suffix = attachment.getSuffix();
+                String destPath = attachment.getPath().replace(suffix, "_300x300" + suffix);
+
+                String filePath = webRoot + destPath;
+                if (new File(filePath).exists()) {
+                    attachment.setPath(destPath);
+                }
+            }
+        }
+
         setAttr("page", page);
 
         List<Archive> archives = AttachmentQuery.me().findArchives();
