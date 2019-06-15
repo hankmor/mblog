@@ -113,8 +113,12 @@ $(document).ready(function(){
             </div>
         <#if OPTION('jpblog_wechat_pay_enable')?? && OPTION('jpblog_wechat_pay_enable')=='true'>
         <div class="reward-content">
-          <p><img src="${CPATH}${OPTION('jpblog_wechat_pay_image')!}"/> </p>
           <p>${OPTION('jpblog_wechat_pay_tips')!'打赏一个呗~~'}</p>
+          <a class="" style="background-color: #19b5fe;color: white;padding: 8px 30px;cursor: pointer;" id="zan_btn">
+              赞赏
+              <img src="${CPATH}${OPTION('jpblog_wechat_pay_image')!}"
+                   style="display: none;width: 30rem;position: absolute;z-index: 9999;border:1px solid #ddd;max-width:40rem;"/>
+          </a>
         </div>
         </#if>
 
