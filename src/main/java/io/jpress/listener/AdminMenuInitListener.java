@@ -35,22 +35,30 @@ public class AdminMenuInitListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         Object temp = message.getData();
-        if (temp == null && !(temp instanceof MenuManager)) {
+        if (temp == null || !(temp instanceof MenuManager)) {
             return;
         }
 
         MenuManager menuMnager = (MenuManager) temp;
+        // 根据模板设置获取菜单模块
         initModuleMenuGroup(menuMnager);
 
+        // 附件
         menuMnager.addMenuGroup(createAttachmentMenuGroup());
+        // 微信
         menuMnager.addMenuGroup(createWechatMenuGroup());
 
         menuMnager.addMenuGroup(MenuGroup.createBlockGroup());
 
+        // 用户
         menuMnager.addMenuGroup(createUserMenuGroup());
+        // 模板
         menuMnager.addMenuGroup(createTemplateMenuGroup());
+        // 插件
         menuMnager.addMenuGroup(createAddonMenuGroup());
+        // 设置
         menuMnager.addMenuGroup(createSettingMenuGroup());
+        // 工具
         menuMnager.addMenuGroup(createToolsMenuGroup());
     }
 

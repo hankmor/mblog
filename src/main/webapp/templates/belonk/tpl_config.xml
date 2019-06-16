@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<infos>
-		<title>userblog</title>
-		<id>userblog</id>
-		<description>userblog根据JBlog模板修改，添加和修改了部分功能。</description>
-		<author>dendy</author>
+		<title>belonk</title>
+		<id>belonk</id>
+		<description>belonk根据JBlog模板修改，添加和修改了部分功能。</description>
+		<author>belonk</author>
 		<authorWebsite>http://www.belonk.com</authorWebsite>
 		<version>v1.0</version>
 		<versionCode>1</versionCode>

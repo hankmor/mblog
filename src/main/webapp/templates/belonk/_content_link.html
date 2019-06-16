@@ -1,0 +1,20 @@
+<#if OPTION('jpblog_links')??>
+<div class="x-white-box">
+	<h3 class="x-box-title">
+		友情链接 <span class="x-title-border"></span>
+	</h3>
+	<div class="x-margin-bottom-10 x-margin-top-10 clearfix">
+		<#list OPTION('jpblog_links')?split("\n") as link>
+			<#assign item = link?split("|")/>
+			<#assign label = item[0]/>
+			<#assign url = item[1]/>
+			<div class="x-layout-80">
+				<a href="${url}" target="_blank" class="right-box-title">
+					<i class="fa fa-arrow-right" aria-hidden="true"></i>
+					<span>${label}</span>
+				</a>
+			</div>
+		</#list>
+	</div>
+</div>
+</#if>
