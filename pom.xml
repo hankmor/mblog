@@ -18,7 +18,7 @@
         <jfinal.weixin.version>1.7</jfinal.weixin.version>
         <druid.version>1.0.22</druid.version>
         <ehcache.version>2.10.2.2.21</ehcache.version>
-        <fastjson.version>1.2.12</fastjson.version>
+        <fastjson.version>1.2.25</fastjson.version>
         <freemarker.version>2.3.23</freemarker.version>
         <javax.mail.version>1.5.5</javax.mail.version>
         <jsoup.version>1.9.2</jsoup.version>
