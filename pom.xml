@@ -21,7 +21,7 @@
         <fastjson.version>1.2.12</fastjson.version>
         <freemarker.version>2.3.23</freemarker.version>
         <javax.mail.version>1.5.5</javax.mail.version>
-        <jsoup.version>1.9.2</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
         <slf4j-api.version>1.7.21</slf4j-api.version>
         <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
         <log4j.version>1.2.17</log4j.version>
